@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "brass-exchange-dev": {
+      "hosting": {
+        "brass-exchange": [
+          "brass-exchange-dev"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "brass-exchange-dev"
+  }
+}
