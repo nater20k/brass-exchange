@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  irebaseConfig: {
+  firebase: {
     apiKey: "AIzaSyBWZ_v9OjCZvrZFg-T-YSP-z5Aa6NtigJc",
     authDomain: "brass-exchange-dev.firebaseapp.com",
     databaseURL: "https://brass-exchange-dev.firebaseio.com",
