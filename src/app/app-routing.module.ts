@@ -6,7 +6,9 @@ const routes: Routes = [
   {
     path: '',
     component: MarketplaceComponent
-  }
+  },
+  { path: 'instruments', loadChildren: () => import('./marketplace/instruments/instruments.module').then(m => m.InstrumentsModule) },
+  { path: 'services', loadChildren: () => import('./marketplace/services/services.module').then(m => m.ServicesModule) }
 ];
 
 @NgModule({
