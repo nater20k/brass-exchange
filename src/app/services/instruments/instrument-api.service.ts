@@ -1,12 +1,12 @@
-import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Observable, from, of } from 'rxjs';
+import { BE } from '@nater20k/brass-exchange-constants';
 import {
   ForSaleListing,
   Instrument,
 } from '@nater20k/brass-exchange-instruments';
-import { BE } from '@nater20k/brass-exchange-constants';
+import { from, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -43,9 +43,9 @@ export class InstrumentApiService {
       .pipe(catchError(() => of([])));
   }
 
-  getInstrumentById(id: string): Observable<Instrument> {
+  getInstrumentById(id: string): Observable<ForSaleListing> {
     return this.instrumentPath
-      .doc<Instrument>(id)
+      .doc<ForSaleListing>(id)
       .valueChanges()
       .pipe(catchError(() => of(null)));
   }

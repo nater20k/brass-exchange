@@ -1,16 +1,20 @@
-<div class="h-16 w-full flex justify-between bg-blue-800 align-middle">
-  <h1 class="ml-2 text-justify text-5xl text-gray-200">BX</h1>
+<div class="h-12 w-full flex justify-between bg-blue-800 align-middle">
+  <h1 class="ml-2 text-justify text-3xl text-gray-200">BX</h1>
 
   <div class="dropdown my-auto">
     <button class="my-auto mr-4 dropbtn">
-      <fa-icon primaryColor="white" size="3x" [icon]="menuBars"></fa-icon>
+      <fa-icon primaryColor="white"
+               size="2x"
+               [icon]="menuBars"></fa-icon>
     </button>
-    <div *ngIf="authenticated; else loggedOut" class="dropdown-content">
+    <div *ngIf="authenticated; else loggedOut"
+         class="dropdown-content">
       <a routerLink="">Link 1</a>
       <a href="#">Link 2</a>
       <a href="#">Link 3</a>
     </div>
-    <ng-template #loggedOut class="dropdown-content">
+    <ng-template #loggedOut
+                 class="dropdown-content">
       <a routerLink="">Logged Out</a>
       <a href="#">Link 2</a>
       <a href="#">Link 3</a>

@@ -5,15 +5,15 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyBWZ_v9OjCZvrZFg-T-YSP-z5Aa6NtigJc",
-    authDomain: "brass-exchange-dev.firebaseapp.com",
-    databaseURL: "https://brass-exchange-dev.firebaseio.com",
-    projectId: "brass-exchange-dev",
-    storageBucket: "brass-exchange-dev.appspot.com",
-    messagingSenderId: "165908464305",
-    appId: "1:165908464305:web:3820a5e27898dd36f5d890",
-    measurementId: "G-8WSKLERM9N"
-  }
+    apiKey: 'AIzaSyBWZ_v9OjCZvrZFg-T-YSP-z5Aa6NtigJc',
+    authDomain: 'brass-exchange-dev.firebaseapp.com',
+    databaseURL: 'https://brass-exchange-dev.firebaseio.com',
+    projectId: 'brass-exchange-dev',
+    storageBucket: 'brass-exchange-dev.appspot.com',
+    messagingSenderId: '165908464305',
+    appId: '1:165908464305:web:532828f24c0c2e20f5d890',
+    measurementId: 'G-P3E176VTH1',
+  },
 };
 
 /*
