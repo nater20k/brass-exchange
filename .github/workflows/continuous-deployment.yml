@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+# This is a basic workflow to help you get started with Actions
+name: Deploy To Firebase
+on:
+  push:
+    branches:
+      - main
+jobs:
+  main:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+          scope: '<@nater20k>'
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - run: npm run build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: use default && firebase deploy --only hosting:dev
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
