@@ -1,7 +1,5 @@
 {
   "editor.formatOnSave": true,
   "prettier.configPath": "./.prettierrc",
-  "prettier.requireConfig": true,
-  "prettier.singleQuote": true,
-  "html.format.wrapAttributes": "force-aligned"
+  "prettier.requireConfig": true
 }
