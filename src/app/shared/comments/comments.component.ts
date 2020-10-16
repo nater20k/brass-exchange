@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { Comment } from '@nater20k/brass-exchange-instruments';
-
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { Comment } from './comment';
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
