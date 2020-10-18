@@ -1,15 +1,10 @@
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-  DocumentReference,
-  DocumentSnapshot,
-} from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 
-import { Observable, of, pipe, from } from 'rxjs';
-import { switchMap, take, map, catchError } from 'rxjs/operators';
+import { Observable, of, from } from 'rxjs';
+import { switchMap, take, catchError } from 'rxjs/operators';
 import { UserApiService } from '../services/users/user-api.service';
 import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
 import { UserAdapterService } from '../services/users/user-adapter.service';
@@ -41,27 +36,17 @@ export class AuthService {
     const provider = new auth.GoogleAuthProvider();
 
     return from(this.afAuth.signInWithPopup(provider)).pipe(
-      switchMap((user) =>
-        from(
-          this.updateUserData(user).pipe(
-            switchMap(() => this.fetchFirestoreUser(user))
-          )
-        )
-      ),
+      switchMap((user) => from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))),
 
       take(1),
       catchError(() => of(null))
     );
   }
 
-  emailRegister(
-    userFormGroup: UserFormGroup
-  ): Observable<void | DocumentReference> {
+  emailRegister(userFormGroup: UserFormGroup): Observable<void | DocumentReference> {
     const { email, password } = userFormGroup;
 
-    return from(
-      this.afAuth.createUserWithEmailAndPassword(email, password)
-    ).pipe(
+    return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       switchMap((user) => this.updateUserData(user, userFormGroup)),
       take(1),
       catchError(() => of(null))
@@ -69,9 +54,7 @@ export class AuthService {
   }
 
   emailSignIn(params: UserFormGroup): Observable<User> {
-    return from(
-      this.afAuth.signInWithEmailAndPassword(params.email, params.password)
-    ).pipe(
+    return from(this.afAuth.signInWithEmailAndPassword(params.email, params.password)).pipe(
       switchMap((user) => this.fetchFirestoreUser(user)),
       take(1),
       catchError(() => of(null))

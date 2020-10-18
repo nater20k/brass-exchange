@@ -13,23 +13,14 @@ describe('AppComponent', () => {
       providers: [AuthService],
     }).compileComponents();
   });
+  const fixture = TestBed.createComponent(AppComponent);
+  const app = fixture.componentInstance;
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it(`should have as title 'brass-exchange'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
     expect(app.title).toEqual('brass-exchange');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('brass-exchange app is running!');
   });
 });

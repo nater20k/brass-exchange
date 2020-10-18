@@ -6,10 +6,8 @@ import { LOCATIONS } from '../services/navigation/navigation.service';
   templateUrl: './marketplace.component.html',
   styleUrls: ['./marketplace.component.scss'],
 })
-export class MarketplaceComponent implements OnInit {
+export class MarketplaceComponent {
   constructor(private navService: NavigationService) {}
-
-  ngOnInit(): void {}
 
   navigateToInstruments(): void {
     this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);

@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NavigationService } from '../services/navigation/navigation.service';
 
 import { MarketplaceComponent } from './marketplace.component';
 
@@ -8,9 +10,10 @@ describe('MarketplaceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MarketplaceComponent ]
-    })
-    .compileComponents();
+      declarations: [MarketplaceComponent],
+      providers: [NavigationService],
+      imports: [RouterTestingModule.withRoutes([])],
+    }).compileComponents();
   });
 
   beforeEach(() => {

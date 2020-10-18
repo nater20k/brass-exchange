@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { NavigationService } from 'src/app/services/navigation/navigation.service';
 
 import { InstrumentsComponent } from './instruments.component';
@@ -11,7 +12,8 @@ describe('InstrumentsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InstrumentsComponent],
-      providers: [NavigationService, Router],
+      providers: [NavigationService],
+      imports: [RouterTestingModule.withRoutes([])],
     }).compileComponents();
   });
 
