@@ -11,17 +11,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CommentsComponent } from './shared/comments/comments.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MarketplaceComponent,
-    LoginComponent,
-    RegisterComponent,
-    NavbarComponent,
-    CommentsComponent
-  ],
+  declarations: [AppComponent, MarketplaceComponent, LoginComponent, RegisterComponent, NavbarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,6 +23,5 @@ import { CommentsComponent } from './shared/comments/comments.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [CommentsComponent]
 })
-export class AppModule { }
+export class AppModule {}
