@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ForSaleListing } from '@nater20k/brass-exchange-instruments';
 
 import { ForSaleListingComponent } from './for-sale-listing.component';
 
@@ -8,14 +9,14 @@ describe('ForSaleListingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ForSaleListingComponent ]
-    })
-    .compileComponents();
+      declarations: [ForSaleListingComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ForSaleListingComponent);
     component = fixture.componentInstance;
+    component.instrument = setInstrument();
     fixture.detectChanges();
   });
 
@@ -23,3 +24,30 @@ describe('ForSaleListingComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+function setInstrument(): ForSaleListing {
+  return {
+    views: 10,
+    favorites: 10,
+    dateCreated: new Date(),
+    isActive: true,
+    isSold: false,
+    isShippingAvailable: true,
+    price: 1000,
+    brand: 'BRAND',
+    model: 'MODEL',
+    key: 'KEY',
+    manufactureDate: new Date(),
+    sellerEmail: 'SELLER_EMAIL',
+    location: {
+      city: 'CITY',
+      state: 'STATE',
+      zip: 'ZIP',
+    },
+    isCaseIncluded: true,
+    description: 'DESCRIPTION',
+    photoUrls: ['PHOTOURLS'],
+    type: 'TYPE',
+    finish: 'lacquer',
+  };
+}

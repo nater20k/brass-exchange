@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
 
 import { InstrumentDetailComponent } from './instrument-detail.component';
 
@@ -8,9 +10,9 @@ describe('InstrumentDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InstrumentDetailComponent ]
-    })
-    .compileComponents();
+      declarations: [InstrumentDetailComponent],
+      providers: [Router, InstrumentApiService],
+    }).compileComponents();
   });
 
   beforeEach(() => {

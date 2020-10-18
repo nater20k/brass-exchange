@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
+import { NavigationService } from 'src/app/services/navigation/navigation.service';
 
 import { ForSaleComponent } from './for-sale.component';
 
@@ -8,9 +10,9 @@ describe('ForSaleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ForSaleComponent ]
-    })
-    .compileComponents();
+      declarations: [ForSaleComponent],
+      providers: [InstrumentApiService, NavigationService],
+    }).compileComponents();
   });
 
   beforeEach(() => {
