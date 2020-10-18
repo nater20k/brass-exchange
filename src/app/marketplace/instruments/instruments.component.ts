@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-instruments',
   templateUrl: './instruments.component.html',
-  styleUrls: ['./instruments.component.scss']
+  styleUrls: ['./instruments.component.scss'],
 })
-export class InstrumentsComponent implements OnInit {
+export class InstrumentsComponent {
+  constructor(private navService: NavigationService) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
+  navigateToBuy(): void {
+    this.navService.navigateTo(LOCATIONS.INSTRUMENTS.BUY);
   }
 
+  navigateToSell(): void {
+    this.navService.navigateTo(LOCATIONS.services);
+  }
 }

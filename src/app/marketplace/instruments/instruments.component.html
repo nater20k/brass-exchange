@@ -1,4 +1,16 @@
-<div class="conatiner m-auto flex-col w-full">
-  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-auto">Buying</button>
-  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-auto">Selling</button>
+<div class="w-full">
+  <div class="p-8 text-center">
+    <button
+      (click)="navigateToBuy()"
+      class="inline-block mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-3/4"
+    >
+      Buy
+    </button>
+    <button
+      (click)="navigateToSell()"
+      class="inline-block mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-3/4"
+    >
+      Sell
+    </button>
+  </div>
 </div>
