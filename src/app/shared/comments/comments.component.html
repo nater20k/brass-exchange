@@ -1,1 +1,22 @@
-<p>comments works!</p>
+<div
+  class="box-border p-4 shadow-md mb-4 border-gray-500 rounded-lg mt-4 bg-indigo-100"
+  *ngFor="let comment of comments"
+>
+  <div class="flex justify-between">
+    <div>
+      {{ comment.username }}
+    </div>
+    <div>
+      {{ comment.createdDate.toDate() | date: 'short' }}
+    </div>
+  </div>
+  <div class="text-gray-800 pt-4 text-sm">
+    {{ comment.content }}
+  </div>
+</div>
+<form>
+  <div class="flex justify-between">
+    <textarea type="t" placeholder="Whatcha think?" class="px-4 py-2 leading-tight rounded-lg"></textarea>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded-lg">Comment</button>
+  </div>
+</form>

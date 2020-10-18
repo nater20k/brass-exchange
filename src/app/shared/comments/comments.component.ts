@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { Comment } from './comment';
+import { Comment } from '@nater20k/brass-exchange-instruments';
+
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
@@ -10,5 +11,7 @@ export class CommentsComponent implements OnInit {
   @Input() comments: Comment[];
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log({ comments: this.comments });
+  }
 }
