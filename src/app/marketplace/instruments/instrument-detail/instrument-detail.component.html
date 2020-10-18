@@ -1,26 +1,25 @@
-<div class="box-border p-4 shadow-sm mb-4  border-gray-500"
-     *ngIf="instrument$ | async as instrument">
+<div class="box-border p-4 shadow-sm mb-4 border-gray-500 rounded-lg" *ngIf="instrument$ | async as instrument">
   <div class="">
-    <h3 class="text-3xl text-center uppercase font-bold">{{ instrument.brand }} {{ instrument.model }}</h3>
+    <h3 class="text-3xl text-center text-gray-800 uppercase font-bold">
+      {{ instrument.brand }} {{ instrument.model }}
+    </h3>
   </div>
   <div class="border-2 divide-solid rounded">
-    <div class="">
-      <img class="transform scale-100"
-           src="{{ instrument.photoUrls[0] }}" />
-    </div>
+    <img class="h-auto w-full mx-auto object-center" src="{{ instrument.photoUrls[0] }}" />
     <div class="content flex justify-between p-4">
       <ul class="left">
-        <li><span class="bold"></span> {{instrument.type | titlecase}}</li>
-        <li *ngIf="instrument.key"><span class="bold">Key:</span> {{instrument.key}}</li>
-        <li *ngIf="instrument.size"><span class="bold">Size:</span> {{instrument.size}}</li>
-        <li><span class="bold">Shipping:</span> {{instrument.isShippingAvailable ? 'Yes' : 'No'}}</li>
+        <li><span class="bold"></span> {{ instrument.type | titlecase }}</li>
+        <li *ngIf="instrument.key"><span class="bold">Key:</span> {{ instrument.key }}</li>
+        <li *ngIf="instrument.size"><span class="bold">Size:</span> {{ instrument.size }}</li>
+        <li><span class="bold">Shipping:</span> {{ instrument.isShippingAvailable ? 'Yes' : 'No' }}</li>
       </ul>
       <ul class="right">
-        <li><span class="bold">Price:</span> ${{instrument.price}}</li>
-        <li *ngIf="instrument.boreSize"><span class="bold">Bore Size:</span> {{instrument.boreSize}}</li>
-        <li *ngIf="instrument.finish"><span class="bold">Finish:</span> {{instrument.finish | titlecase}}</li>
-        <li *ngIf="instrument.views"><span class="bold">Views:</span> {{instrument.views }}</li>
+        <li><span class="bold">Price:</span> ${{ instrument.price }}</li>
+        <li *ngIf="instrument.boreSize"><span class="bold">Bore Size:</span> {{ instrument.boreSize }}</li>
+        <li *ngIf="instrument.finish"><span class="bold">Finish:</span> {{ instrument.finish | titlecase }}</li>
+        <li *ngIf="instrument.views"><span class="bold">Views:</span> {{ instrument.views }}</li>
       </ul>
     </div>
   </div>
+  <app-comments [comments]="instrument.comments"></app-comments>
 </div>
