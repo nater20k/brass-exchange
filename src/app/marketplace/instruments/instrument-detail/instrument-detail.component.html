@@ -5,7 +5,9 @@
     </h3>
   </div>
   <div class="border-2 divide-solid rounded">
-    <img class="h-auto w-full mx-auto object-center" src="{{ instrument.photoUrls[0] }}" />
+    <div class="">
+      <img class="img" src="{{ instrument.photoUrls[0] }}" />
+    </div>
     <div class="content flex justify-between p-4">
       <ul class="left">
         <li><span class="bold"></span> {{ instrument.type | titlecase }}</li>
@@ -21,5 +23,5 @@
       </ul>
     </div>
   </div>
-  <app-comments [comments]="instrument.comments"></app-comments>
+  <app-comments [comments]="instrument.comments" (newComment)="addComment($event)"></app-comments>
 </div>
