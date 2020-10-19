@@ -1,1 +1,26 @@
-<p>login works!</p>
+<div class="w-full h-full mt-16">
+  <!-- <div class="block">
+    <h1>BX</h1>
+  </div> -->
+  <div class="block p-4 border-2 border-gray-400 rounded-lg m-4">
+    <form [formGroup]="loginFormGroup" *ngIf="loginFormGroup">
+      <div class="py-4 flex justify-between">
+        <label class="pr-2" for="username">Username</label>
+        <input class="rounded-md" type="text" id="username" />
+      </div>
+      <div class="py-4 flex justify-between">
+        <label class="pr-4" for="password">Password</label>
+        <input class="rounded-md" type="password" id="password" />
+      </div>
+      <div class="flex justify-between">
+        <button (click)="authService.googleSignIn()" class="w-8 object-center">
+          <img src="../../../assets/icons/google.svg" />
+        </button>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Login</button>
+      </div>
+      <div>
+        <!-- Forgot Password -->
+      </div>
+    </form>
+  </div>
+</div>
