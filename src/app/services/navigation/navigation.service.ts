@@ -20,4 +20,5 @@ export const LOCATIONS = {
     DETAIL: (id: string) => `instruments/detail/${id}`,
   },
   services: 'services',
+  LOGIN: 'login',
 };
