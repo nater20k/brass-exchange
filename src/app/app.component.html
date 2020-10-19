@@ -1,4 +1,4 @@
-<app-navbar [authenticated]="true"></app-navbar>
+<app-navbar [authenticated]="auth.user$ | async"></app-navbar>
 <div class="pt-10">
   <router-outlet></router-outlet>
 </div>
