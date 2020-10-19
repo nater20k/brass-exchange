@@ -24,6 +24,7 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap((user) => {
         if (user) {
+          sessionStorage.setItem('displayName', user.displayName);
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
