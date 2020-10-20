@@ -12,9 +12,10 @@ import { environment } from 'src/environments/environment';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @NgModule({
-  declarations: [AppComponent, MarketplaceComponent, LoginComponent, RegisterComponent, NavbarComponent],
+  declarations: [AppComponent, MarketplaceComponent, LoginComponent, RegisterComponent, NavbarComponent, ContactUsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
