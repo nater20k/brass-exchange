@@ -1,1 +1,48 @@
-<p>register works!</p>
+<div class="sm:w-full h-full mt-16 xl:w-1/3 xl:mx-auto" *ngIf="true">
+  <!-- <div class="block">
+    <h1>BX</h1>
+  </div> -->
+  <div class="block p-4 border-2 border-gray-400 rounded-lg m-4">
+    <form [formGroup]="registrationFormGroup.formGroup" *ngIf="registrationFormGroup" (ngSubmit)="submitRegistration()">
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-2" for="username">Username</label>
+        <input formControlName="displayName" class="rounded-md" type="text" id="username" />
+      </div>
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-2" for="firstname">First Name</label>
+        <input formControlName="firstName" class="rounded-md" type="text" id="firstname" />
+      </div>
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-2" for="lastName">Last Name</label>
+        <input formControlName="lastName" class="rounded-md" type="text" id="lastname" />
+      </div>
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-2" for="instrument">Instrument</label>
+        <input formControlName="instrument" class="rounded-md" type="instrument" id="instrument" />
+      </div>
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-2" for="email">Email</label>
+        <input formControlName="email" class="rounded-md" type="email" id="email" />
+      </div>
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-4" for="password">Password</label>
+        <input formControlName="password" class="rounded-md" type="password" id="password" />
+      </div>
+      <div class="py-4 flex justify-between text-sm">
+        <label class="pr-4" for="confirmPassword">Confirm Password</label>
+        <input formControlName="confirmPassword" class="rounded-md" type="password" id="confirmPassword" />
+      </div>
+      <div class="flex justify-between">
+        <!-- <button type="button" (click)="" class="w-8 object-center">
+          <img src="../../../assets/icons/google.svg" />
+        </button> -->
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Sign Up
+        </button>
+      </div>
+      <div>
+        <!-- Forgot Password -->
+      </div>
+    </form>
+  </div>
+</div>
