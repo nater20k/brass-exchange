@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 
 import { Observable, of, from } from 'rxjs';
-import { switchMap, take, catchError } from 'rxjs/operators';
+import { switchMap, take, catchError, tap } from 'rxjs/operators';
 import { UserApiService } from '../services/users/user-api.service';
 import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
 import { UserAdapterService } from '../services/users/user-adapter.service';
@@ -25,7 +25,7 @@ export class AuthService {
       switchMap((user) => {
         if (user) {
           sessionStorage.setItem('displayName', user.displayName);
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          return this.userApiService.getSingleUser(user.uid);
         } else {
           return of(null);
         }
@@ -63,7 +63,6 @@ export class AuthService {
   }
 
   private fetchFirestoreUser(user: auth.UserCredential): Observable<User> {
-    console.log('USER', user);
     return this.userApiService.getSingleUser(user.user.uid).pipe(
       take(1),
       catchError(() => of(null))
