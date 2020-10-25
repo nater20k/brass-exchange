@@ -14,7 +14,6 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.setForm();
-    console.log(this.registrationFormGroup);
   }
 
   setForm() {
@@ -22,7 +21,6 @@ export class RegisterComponent implements OnInit {
   }
 
   submitRegistration() {
-    console.log(this.registrationFormGroup);
     this.authService.emailRegister(this.registrationFormGroup);
   }
 }
