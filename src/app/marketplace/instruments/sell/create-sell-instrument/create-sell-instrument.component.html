@@ -1,0 +1,29 @@
+<div class="w-full border-gray-500 border-b-2" *ngIf="createSellFormGroup">
+  <form [formGroup]="createSellFormGroup.formGroup" class="p-4" (ngSubmit)="submitCreateSell()">
+    <div class="flex justify-between px-2 py-4">
+      <label class="align-middle" for="brand">Brand</label
+      ><input formControlName="brand" class="rounded-md py-1" type="text" />
+    </div>
+    <div class="flex justify-between px-2 py-4">
+      <label class="align-middle" for="model">Model</label
+      ><input formControlName="model" class="rounded-md py-1" type="text" />
+    </div>
+    <div class="flex justify-between px-2 py-4">
+      <label class="align-middle" for="price">Price</label
+      ><input formControlName="price" class="rounded-md py-1" type="number" />
+    </div>
+    <div class="flex justify-between px-2 py-4">
+      <label class="align-middle" for="shipping">Shipping</label
+      ><input formControlName="isShippingAvailable" class="rounded-md py-1" type="text" />
+    </div>
+    <div class="flex justify-between px-2 py-4">
+      <label class="align-middle" for="caseIncluded">Case Included</label
+      ><input formControlName="isCaseIncluded" class="rounded-md py-1" type="text" />
+    </div>
+
+    <div class="flex justify-around">
+      <button class="bg-red-500 px-8 py-2 rounded-md m-2" type="button" (click)="clearForm()">Clear</button
+      ><button class="bg-blue-500 px-8 py-2 rounded-md m-2" type="submit">Save</button>
+    </div>
+  </form>
+</div>
