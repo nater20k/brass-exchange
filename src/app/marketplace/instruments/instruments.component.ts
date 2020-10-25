@@ -14,6 +14,6 @@ export class InstrumentsComponent {
   }
 
   navigateToSell(): void {
-    this.navService.navigateTo(LOCATIONS.services);
+    this.navService.navigateTo(LOCATIONS.INSTRUMENTS.SELL);
   }
 }
