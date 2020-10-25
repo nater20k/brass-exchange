@@ -1,0 +1,9 @@
+<div class="fixed bg-blue-500 w-full h-12 flex justify-end">
+  <select name="filter" id="" class="rounded-md px-auto py-2 bg-indigo-200 m-2">
+    <option value="">Lowest Price</option>
+    <option class="p-0" value="">Newest Listing</option>
+  </select>
+</div>
+<div class="pt-12 z-0" *ngFor="let instrument of instrumentsForSale | async">
+  <app-for-sale-listing [instrument]="instrument" (click)="navigateToDetail(instrument.id)"></app-for-sale-listing>
+</div>
