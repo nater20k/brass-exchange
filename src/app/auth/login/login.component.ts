@@ -41,8 +41,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .emailSignIn(userLogin)
       .pipe(take(1))
-      .subscribe((user) => {
-        console.log(user);
+      .subscribe(() => {
         this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
       });
   }
@@ -51,8 +50,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .googleSignIn()
       .pipe(take(1))
-      .subscribe((user) => {
-        console.log(user);
+      .subscribe(() => {
         this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
       });
   }
