@@ -16,7 +16,7 @@ export const LOCATIONS = {
   INSTRUMENTS: {
     HOME: 'instruments',
     BUY: 'instruments/for-sale',
-    SELL: 'instruments',
+    SELL: 'instruments/sell',
     DETAIL: (id: string) => `instruments/detail/${id}`,
   },
   services: 'services',
