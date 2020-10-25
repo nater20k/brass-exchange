@@ -1,4 +1,4 @@
-<div class="fixed h-12 w-full flex justify-between bg-blue-500 align-middle">
+<div class="fixed h-12 w-full flex justify-between bg-blue-500 align-middle z-10">
   <h1 class="ml-2 text-justify text-3xl text-gray-200">
     <a routerLink="/">BX</a>
   </h1>
@@ -12,7 +12,7 @@
     >
       <a class="block py-4 px-4 hover:bg-indigo-300" (click)="toggleMenu()" routerLink="/profile"> Profile </a>
       <a class="block py-4 px-4 hover:bg-indigo-300" (click)="toggleMenu()" routerLink="/instruments/for-sale"> Buy </a>
-      <a class="block py-4 px-4 hover:bg-indigo-300" (click)="toggleMenu()" href="#"> Sell </a>
+      <a class="block py-4 px-4 hover:bg-indigo-300" (click)="toggleMenu()" routerLink="/instruments/sell"> Sell </a>
       <a class="block py-4 px-4 hover:bg-indigo-300" (click)="toggleMenu()" routerLink="/contact-us"> Contact Us </a>
       <a class="block py-4 px-4 hover:bg-indigo-300" (click)="logout()">Logout</a>
     </div>

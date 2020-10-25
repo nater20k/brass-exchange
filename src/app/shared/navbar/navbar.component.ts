@@ -22,16 +22,10 @@ export class NavbarComponent implements OnInit {
     this.auth
       .signOut()
       .pipe(take(1))
-      .subscribe(
-        () => {
-          this.isMenuOpen = false;
-          this.navService.navigateTo(LOCATIONS.LOGIN);
-        },
-        () => {},
-        () => {
-          console.log('complete');
-        }
-      );
+      .subscribe(() => {
+        this.isMenuOpen = false;
+        this.navService.navigateTo(LOCATIONS.LOGIN);
+      });
   }
 
   toggleMenu() {
