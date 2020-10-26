@@ -1,29 +1,100 @@
 <div class="w-full border-gray-500 border-b-2" *ngIf="createSellFormGroup">
-  <form [formGroup]="createSellFormGroup.formGroup" class="p-4" (ngSubmit)="submitCreateSell()">
+  <form
+    [formGroup]="createSellFormGroup.formGroup"
+    class="p-2"
+    (ngSubmit)="submitCreateSell()"
+  >
     <div class="flex justify-between px-2 py-4">
-      <label class="align-middle" for="brand">Brand</label
-      ><input formControlName="brand" class="rounded-md py-1" type="text" />
+      <label class="my-auto mx-0 text-lg" for="type">Type</label>
+      <select
+        id="type"
+        formControlName="type"
+        class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+      >
+        <option value=""></option>
+        <option
+          value="instrument"
+          *ngFor="let instrument of genericInstruments"
+        >
+          {{ instrument | titlecase }}
+        </option>
+      </select>
+      <div
+        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+      >
+        <!-- <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg> -->
+      </div>
     </div>
-    <div class="flex justify-between px-2 py-4">
-      <label class="align-middle" for="model">Model</label
-      ><input formControlName="model" class="rounded-md py-1" type="text" />
+    <div class="flex justify-between px-2 py-4 align-middle">
+      <label class="my-auto mx-0 text-lg" for="brand">Brand</label
+      ><input
+        formControlName="brand"
+        class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+      />
     </div>
-    <div class="flex justify-between px-2 py-4">
-      <label class="align-middle" for="price">Price</label
-      ><input formControlName="price" class="rounded-md py-1" type="number" />
+    <div class="flex justify-between px-2 py-4 align-middle">
+      <label class="my-auto mx-0 text-lg" for="model">Model</label
+      ><input
+        formControlName="model"
+        class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        type="text"
+      />
     </div>
-    <div class="flex justify-between px-2 py-4">
-      <label class="align-middle" for="shipping">Shipping</label
-      ><input formControlName="isShippingAvailable" class="rounded-md py-1" type="text" />
+    <div class="flex justify-between px-2 py-4 align-middle">
+      <label class="my-auto mx-0 text-lg" for="price">Price</label
+      ><input
+        formControlName="price"
+        class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        type="number"
+      />
     </div>
-    <div class="flex justify-between px-2 py-4">
-      <label class="align-middle" for="caseIncluded">Case Included</label
-      ><input formControlName="isCaseIncluded" class="rounded-md py-1" type="text" />
+    <div class="flex justify-between px-2 py-4 align-middle">
+      <label class="my-auto mx-0 text-lg" for="shipping">Shipping</label>
+      <select
+        id="shipping"
+        formControlName="isShippingAvailable"
+        class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+      >
+        <option [ngValue]="true">Yes</option>
+        <option [ngValue]="false">No</option>
+      </select>
     </div>
-
+    <div class="flex justify-between px-2 py-4 align-middle">
+      <label class="my-auto mx-0 text-lg" for="caseIncluded"
+        >Case Included</label
+      >
+      <select
+        id="caseIncluded"
+        formControlName="isCaseIncluded"
+        class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+      >
+        <option [ngValue]="true">Yes</option>
+        <option [ngValue]="false">No</option>
+      </select>
+    </div>
+    <ng-container formGroupName="location">
+      <div class="flex justify-between px-2 py-4 align-middle">
+        <label class="my-auto mx-0 text-lg" for="zip">Zip Code</label
+        ><input
+          formControlName="zip"
+          class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+          type="number"
+        />
+      </div>
+    </ng-container>
     <div class="flex justify-around">
-      <button class="bg-red-500 px-8 py-2 rounded-md m-2" type="button" (click)="clearForm()">Clear</button
-      ><button class="bg-blue-500 px-8 py-2 rounded-md m-2" type="submit">Save</button>
+      <button
+        class="bg-red-500 px-8 py-2 rounded-md m-2"
+        type="button"
+        (click)="clearForm()"
+      >
+        Clear</button
+      ><button class="bg-blue-500 px-8 py-2 rounded-md m-2" type="submit">
+        Save
+      </button>
     </div>
   </form>
 </div>

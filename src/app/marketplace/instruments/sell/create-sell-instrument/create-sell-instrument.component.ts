@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { BE } from '@nater20k/brass-exchange-constants';
 import { FormBuilderService, ForSaleInstrumentListingFormGroup } from '@nater20k/brass-exchange-instruments';
 
 @Component({
@@ -9,6 +10,7 @@ import { FormBuilderService, ForSaleInstrumentListingFormGroup } from '@nater20k
 })
 export class CreateSellInstrumentComponent implements OnInit {
   createSellFormGroup: ForSaleInstrumentListingFormGroup;
+  genericInstruments = BE.INSTRUMENTS.BRASS.sort();
   constructor(private formBuilderService: FormBuilderService) {}
 
   ngOnInit(): void {
@@ -29,5 +31,10 @@ export class CreateSellInstrumentComponent implements OnInit {
     if (confirm('Are you sure you want to clear the form?')) {
       this.createSellFormGroup.formGroup.reset();
     }
+  }
+
+  get price(): AbstractControl {
+    console.log(this.createSellFormGroup.formGroup.get('price'));
+    return this.createSellFormGroup.formGroup.get('price');
   }
 }
