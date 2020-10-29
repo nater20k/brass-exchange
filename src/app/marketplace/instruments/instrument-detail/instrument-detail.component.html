@@ -5,9 +5,7 @@
     </h3>
   </div>
   <div class="border-2 divide-solid rounded">
-    <div class="">
-      <img class="img" src="{{ instrument.photoUrls[0] }}" />
-    </div>
+    <app-image [sellerEmail]="instrument.sellerEmail" [instrumentId]="instrument.id"></app-image>
     <div class="content flex justify-between p-4">
       <ul class="left">
         <li><span class="bold"></span> {{ instrument.type | titlecase }}</li>
