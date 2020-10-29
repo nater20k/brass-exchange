@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ForSaleListing } from '@nater20k/brass-exchange-instruments';
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, take, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
 
@@ -10,24 +10,17 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
   templateUrl: './list-sell-instruments.component.html',
   styleUrls: ['./list-sell-instruments.component.scss'],
 })
-export class ListSellInstrumentsComponent implements OnInit, OnDestroy {
-  subs: Subscription[] = [];
-  instrumentsListed: Observable<ForSaleListing[]>;
+export class ListSellInstrumentsComponent implements OnInit {
+  instrumentsList: Observable<ForSaleListing[]>;
   constructor(private userApi: UserApiService, private authService: AuthService) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.fetchInstrumentsListedByUser();
   }
 
-  ngOnDestroy(): void {
-    this.subs.forEach((sub) => sub.unsubscribe());
-  }
-
   fetchInstrumentsListedByUser() {
-    this.subs.push(
-      this.authService.user$.subscribe(
-        (user) => (this.instrumentsListed = this.userApi.getInstrumentsForSaleByUser(user.uid))
-      )
+    this.instrumentsList = this.authService.user$.pipe(
+      switchMap((user) => this.userApi.getInstrumentsForSaleByUser(user.uid))
     );
   }
 }

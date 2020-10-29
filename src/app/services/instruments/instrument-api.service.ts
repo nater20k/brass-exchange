@@ -5,9 +5,10 @@ import {
   ForSaleListing,
   Instrument,
   Comment,
+  ForSaleInstrumentListingFormGroup,
 } from '@nater20k/brass-exchange-instruments';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -27,22 +28,21 @@ export class InstrumentApiService {
 
   // READ
   getAllInstruments(): Observable<ForSaleListing[]> {
-    return this.instrumentPath
-      .valueChanges({ idField: 'id' })
-      .pipe(catchError(() => of([])));
+    return this.instrumentPath.valueChanges({ idField: 'id' }).pipe(catchError(() => of([])));
   }
 
   getAllForSaleInstruments(): Observable<ForSaleListing[]> {
-    return this.instrumentPath
-      .valueChanges({ idField: 'id' })
-      .pipe(catchError(() => of([])));
+    return this.instrumentPath.valueChanges({ idField: 'id' }).pipe(catchError(() => of([])));
   }
 
   getInstrumentById(id: string): Observable<ForSaleListing> {
     return this.instrumentPath
       .doc<ForSaleListing>(id)
       .valueChanges()
-      .pipe(catchError(() => of(null)));
+      .pipe(
+        map((instrument) => (instrument = { ...instrument, id })),
+        catchError(() => of(null))
+      );
   }
 
   getInstrumentsByType(type: string): Observable<ForSaleListing[]> {
@@ -54,31 +54,22 @@ export class InstrumentApiService {
 
   getInstrumentsLessThanAmount(maxAmount: number): Observable<ForSaleListing[]> {
     return this.instrumentPath.valueChanges().pipe(
-      map((instruments) =>
-        instruments.filter((instrument) => instrument.price < maxAmount)
-      ),
+      map((instruments) => instruments.filter((instrument) => instrument.price < maxAmount)),
       catchError(() => of([]))
     );
   }
 
   getInstrumentsMoreThanAmount(minAmount: number): Observable<ForSaleListing[]> {
     return this.instrumentPath.valueChanges().pipe(
-      map((instruments) =>
-        instruments.filter((instrument) => instrument.price > minAmount)
-      ),
+      map((instruments) => instruments.filter((instrument) => instrument.price > minAmount)),
       catchError(() => of([]))
     );
   }
 
-  getInstrumentsWithinBothAmounts(
-    minAmount: number,
-    maxAmount: number
-  ): Observable<ForSaleListing[]> {
+  getInstrumentsWithinBothAmounts(minAmount: number, maxAmount: number): Observable<ForSaleListing[]> {
     return this.instrumentPath.valueChanges().pipe(
       map((instruments) =>
-        instruments.filter(
-          (instrument) => instrument.price > minAmount && instrument.price < maxAmount
-        )
+        instruments.filter((instrument) => instrument.price > minAmount && instrument.price < maxAmount)
       ),
       catchError(() => of([]))
     );
@@ -86,26 +77,18 @@ export class InstrumentApiService {
 
   getInstrumentsByBrand(brand: string): Observable<ForSaleListing[]> {
     return this.instrumentPath.valueChanges().pipe(
-      map((instruments) =>
-        instruments.filter(
-          (instrument) => instrument.brand.toLowerCase() === brand.toLowerCase()
-        )
-      ),
+      map((instruments) => instruments.filter((instrument) => instrument.brand.toLowerCase() === brand.toLowerCase())),
       catchError(() => of([]))
     );
   }
 
   // UPDATE
   updateInstrument(instrument: Partial<Instrument>): Observable<void> {
-    return from(this.instrumentPath.doc(instrument.id).update(instrument)).pipe(
-      catchError(() => of(null))
-    );
+    return from(this.instrumentPath.doc(instrument.id).update(instrument)).pipe(catchError(() => of(null)));
   }
 
   updateForSaleListing(instrument: Partial<Instrument>): Observable<void> {
-    return from(this.instrumentPath.doc(instrument.id).update(instrument)).pipe(
-      catchError(() => of(null))
-    );
+    return from(this.instrumentPath.doc(instrument.id).update(instrument)).pipe(catchError(() => of(null)));
   }
 
   // DELETE
@@ -114,9 +97,7 @@ export class InstrumentApiService {
   }
 
   deactivateInstrument(id: string): Observable<void> {
-    return from(this.instrumentPath.doc(id).set({ isActive: false })).pipe(
-      catchError(() => of(null))
-    );
+    return from(this.instrumentPath.doc(id).set({ isActive: false })).pipe(catchError(() => of(null)));
   }
 
   // COMMENT SECTION
@@ -125,9 +106,7 @@ export class InstrumentApiService {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
       switchMap((instrument) => {
-        instrument.comments.length > 0
-          ? instrument.comments.push(comment)
-          : (instrument.comments = [comment]);
+        instrument.comments.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment]);
         return this.updateInstrument(instrument);
       })
     );
