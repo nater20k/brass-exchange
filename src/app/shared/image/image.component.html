@@ -1,0 +1,7 @@
+<div class="w-full" *ngIf="!isHeroImage && imageUrls$ | async as imageUrls; let i = index">
+  <img class="w-full" *ngFor="let imageUrl of imageUrls" src="{{ imageUrl }}" alt="Instrument Image" />
+</div>
+
+<div class="w-full" *ngIf="isHeroImage">
+  <img *ngIf="imageUrls$ | async as imageUrls" src="{{ imageUrls[0] }}" alt="Instrument Image" />
+</div>
