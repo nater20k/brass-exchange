@@ -1,9 +1,5 @@
-<div class="w-full border-gray-500 border-b-2" *ngIf="createSellFormGroup">
-  <form
-    [formGroup]="createSellFormGroup.formGroup"
-    class="p-2"
-    (ngSubmit)="submitCreateSell()"
-  >
+<div class="w-fullkey" *ngIf="createSellFormGroup">
+  <form [formGroup]="createSellFormGroup.formGroup" class="p-2" (ngSubmit)="submitCreateSell()">
     <div class="flex justify-between px-2 py-4">
       <label class="my-auto mx-0 text-lg" for="type">Type</label>
       <select
@@ -12,20 +8,11 @@
         class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
       >
         <option value=""></option>
-        <option
-          value="instrument"
-          *ngFor="let instrument of genericInstruments"
-        >
+        <option value="instrument" *ngFor="let instrument of genericInstruments">
           {{ instrument | titlecase }}
         </option>
       </select>
-      <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-      >
-        <!-- <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-        </svg> -->
-      </div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"></div>
     </div>
     <div class="flex justify-between px-2 py-4 align-middle">
       <label class="my-auto mx-0 text-lg" for="brand">Brand</label
@@ -63,9 +50,7 @@
       </select>
     </div>
     <div class="flex justify-between px-2 py-4 align-middle">
-      <label class="my-auto mx-0 text-lg" for="caseIncluded"
-        >Case Included</label
-      >
+      <label class="my-auto mx-0 text-lg" for="caseIncluded">Case Included</label>
       <select
         id="caseIncluded"
         formControlName="isCaseIncluded"
@@ -85,16 +70,98 @@
         />
       </div>
     </ng-container>
-    <div class="flex justify-around">
-      <button
-        class="bg-red-500 px-8 py-2 rounded-md m-2"
-        type="button"
-        (click)="clearForm()"
-      >
-        Clear</button
-      ><button class="bg-blue-500 px-8 py-2 rounded-md m-2" type="submit">
-        Save
-      </button>
+    <div *ngIf="showAddDetails">
+      <div class="flex justify-between px-2 py-4 align-middle">
+        <label class="my-auto mx-0 text-lg" for="key">Key</label>
+        <select
+          id="key"
+          formControlName="key"
+          class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option *ngFor="let key of keys" [ngValue]="key">{{ key }}</option>
+        </select>
+      </div>
+      <div class="flex justify-between px-2 py-4 align-middle">
+        <label class="my-auto mx-0 text-lg" for="finish">Finish</label>
+        <select
+          id="finish"
+          formControlName="finish"
+          class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option *ngFor="let finish of finishes" [ngValue]="finish">{{ finish }}</option>
+        </select>
+      </div>
+      <div class="flex justify-between px-2 py-4 align-middle">
+        <label class="my-auto mx-0 text-lg" for="price">Build Date</label
+        ><input
+          formControlName="manufactureDate"
+          class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+          type="date"
+        />
+      </div>
+      <div class="flex justify-between px-2 py-4 align-middle">
+        <label class="my-auto mx-0 text-lg" for="valveCount">Valve Count</label>
+        <input
+          id="valveCount"
+          formControlName="valveCount"
+          class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+          type="number"
+          maxlength="1"
+        />
+      </div>
+      <div class="flex justify-between px-2 py-4 align-middle">
+        <label class="my-auto mx-0 text-lg" for="boreSize">Bore Size</label>
+        <input
+          id="boreSize"
+          formControlName="boreSize"
+          class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-6 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+          type="number"
+        />
+      </div>
+    </div>
+    <div class="">
+      <div class="block">
+        <div class="flex justify-between">
+          <button
+            type="button"
+            (click)="clickUploadWorkaround()"
+            class="bg-blue-500 px-12 py-2 rounded-md m-2 text-gray-100"
+          >
+            <input id="file" class="inputfile" type="file" multiple (change)="stagePhotos($event)" />
+            <img class="w-8 mx-4" src="../../../../../assets/icons/camera.svg" />
+          </button>
+          <button
+            *ngIf="!showAddDetails"
+            class="bg-blue-500 px-12 py-2 rounded-md m-2"
+            type="button"
+            (click)="toggleShowDetails()"
+          >
+            <img class="mx-4 w-8" src="../../../../../assets/icons/add-plus-button.svg" />
+          </button>
+          <button
+            *ngIf="showAddDetails"
+            class="bg-blue-500 px-12 py-2 rounded-md m-2"
+            type="button"
+            (click)="toggleShowDetails()"
+          >
+            <img class="mx-4 w-8" src="../../../../../assets/icons/horizontal-line-remove-button.svg" />
+          </button>
+        </div>
+      </div>
+      <div class="block">
+        <div class="flex justify-between">
+          <button class="bg-red-500 px-16 py-4 rounded-md m-2 text-gray-100" type="button" (click)="clearForm()">
+            Clear
+          </button>
+          <button
+            [disabled]="createSellFormGroup.formGroup.invalid"
+            class="bg-blue-500 px-16 py-4 rounded-md m-2 text-gray-100"
+            type="submit"
+          >
+            Save
+          </button>
+        </div>
+      </div>
     </div>
   </form>
 </div>
