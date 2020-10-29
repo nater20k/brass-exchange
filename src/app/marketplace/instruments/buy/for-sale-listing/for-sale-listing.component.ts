@@ -11,6 +11,10 @@ export class ForSaleListingComponent {
   @Input() instrument: ForSaleListing;
   titleCasePipe = new TitleCasePipe();
 
+  get instrumentId(): string {
+    return this.instrument.id;
+  }
+
   get brand(): string {
     return this.titleCasePipe.transform(this.instrument.brand);
   }
@@ -67,5 +71,9 @@ export class ForSaleListingComponent {
 
   get views(): number {
     return this.instrument.views;
+  }
+
+  get sellerEmail(): string {
+    return this.instrument.sellerEmail;
   }
 }
