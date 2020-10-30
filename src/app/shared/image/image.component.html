@@ -1,18 +1,24 @@
-<div *ngIf="isLoaded">
-  <div class="w-full" *ngIf="!isHeroImage && imageUrls$ | async as imageUrls; let i = index">
-    <img class="w-full" *ngFor="let imageUrl of imageUrls" src="{{ imageUrl }}" alt="Instrument Image" />
-  </div>
+<div *ngIf="imageUrls$ | async as imageUrls">
+  <app-loading *ngIf="!isAllPageLoaded"></app-loading>
+  <ng-container class="w-full bg-white" *ngIf="!isHeroImage">
+    <drag-scroll class="bg-white">
+      <img
+        drag-scroll-item
+        class="h-auto object-fill"
+        (load)="toggleImagesLoaded()"
+        *ngFor="let imageUrl of imageUrls"
+        src="{{ imageUrl }}"
+        alt="Instrument Image"
+      />
+    </drag-scroll>
+  </ng-container>
 
-  <div class="w-full" *ngIf="isHeroImage">
+  <ng-container class="w-full" *ngIf="isHeroImage">
     <img
+      (load)="toggleImagesLoaded()"
       class="object-contain h-30 w-full"
-      *ngIf="imageUrls$ | async as imageUrls"
       src="{{ imageUrls[0] }}"
       alt="Instrument Image"
     />
-  </div>
-</div>
-
-<div *ngIf="!isLoaded" class="w-full bg-indigo-300">
-  <svg class="object-contain h-30 animate-spin w-20 mr-3 bg-purple-100" viewBox="0 0 24 24"></svg>
+  </ng-container>
 </div>
