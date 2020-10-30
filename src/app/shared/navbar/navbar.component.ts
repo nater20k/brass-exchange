@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
@@ -10,7 +9,6 @@ import { LOCATIONS, NavigationService } from 'src/app/services/navigation/naviga
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  menuBars = faBars;
   @Input() authenticated = false;
   isMenuOpen = false;
   constructor(public auth: AuthService, private navService: NavigationService) {}
