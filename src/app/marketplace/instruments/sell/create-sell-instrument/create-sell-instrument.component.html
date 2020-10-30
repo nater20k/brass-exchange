@@ -88,7 +88,7 @@
           formControlName="finish"
           class="w-48 block appearance-none bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
         >
-          <option *ngFor="let finish of finishes" [ngValue]="finish">{{ finish }}</option>
+          <option *ngFor="let finish of finishes" [ngValue]="finish">{{ finish | titlecase }}</option>
         </select>
       </div>
       <div class="flex justify-between px-2 py-4 align-middle">
