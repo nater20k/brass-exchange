@@ -29,6 +29,7 @@ export class UploadService {
       .ref(location)
       .listAll()
       .pipe(
+        take(1),
         map((result) => {
           result.items.forEach((item) =>
             item.getDownloadURL().then((url) => {
