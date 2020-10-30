@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { BE } from '@nater20k/brass-exchange-constants';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
+import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -10,7 +12,13 @@ import { AuthService } from '../auth.service';
 })
 export class RegisterComponent implements OnInit {
   registrationFormGroup: UserFormGroup;
-  constructor(private authService: AuthService, private userFormService: UserFormBuilderService) {}
+  instruments = BE.INSTRUMENTS.BRASS.sort();
+
+  constructor(
+    private authService: AuthService,
+    private userFormService: UserFormBuilderService,
+    private navService: NavigationService
+  ) {}
 
   ngOnInit(): void {
     this.setForm();
@@ -21,6 +29,8 @@ export class RegisterComponent implements OnInit {
   }
 
   submitRegistration() {
-    this.authService.emailRegister(this.registrationFormGroup);
+    this.authService
+      .emailRegister(this.registrationFormGroup)
+      .subscribe(() => this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME));
   }
 }
