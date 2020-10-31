@@ -79,9 +79,8 @@ export class AuthService {
     user: auth.UserCredential,
     userFormGroup?: UserFormGroup
   ): Observable<void | DocumentReference> {
-    return this.userApiService.createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup)).pipe(
-      tap(console.log),
-      catchError(() => of(null))
-    );
+    return this.userApiService
+      .createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup))
+      .pipe(catchError(() => of(null)));
   }
 }
