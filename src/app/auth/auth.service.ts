@@ -17,7 +17,6 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afs: AngularFirestore,
     private userAdapter: UserAdapterService,
     private userApiService: UserApiService
   ) {
