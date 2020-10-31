@@ -106,7 +106,7 @@ export class InstrumentApiService {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
       switchMap((instrument) => {
-        instrument.comments.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment]);
+        instrument?.comments?.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment]);
         return this.updateInstrument(instrument);
       })
     );
