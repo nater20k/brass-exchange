@@ -1,11 +1,11 @@
-<div class="box-border p-4 shadow-sm mb-4 border-gray-500 rounded-lg" *ngIf="instrument$ | async as instrument">
+<div class="box-border p-4 mb-4 border-gray-500 rounded-lg" *ngIf="instrument$ | async as instrument">
   <div class="">
     <h3 class="text-3xl text-center text-gray-800 uppercase font-bold">
       {{ instrument.brand }} {{ instrument.model }}
     </h3>
   </div>
-  <div class="border-2 divide-solid rounded">
-    <img class="h-auto w-full mx-auto object-center" src="{{ instrument.photoUrls[0] }}" />
+  <div class="border-2 shadow-md divide-solid rounded mb-4">
+    <app-image [sellerEmail]="instrument.sellerEmail" [instrumentId]="instrument.id"></app-image>
     <div class="content flex justify-between p-4">
       <ul class="left">
         <li><span class="bold"></span> {{ instrument.type | titlecase }}</li>
@@ -20,6 +20,7 @@
         <li *ngIf="instrument.views"><span class="bold">Views:</span> {{ instrument.views }}</li>
       </ul>
     </div>
+    <p class="p-4 text-sm">{{ instrument.description }}</p>
   </div>
-  <app-comments [comments]="instrument.comments"></app-comments>
+  <app-comments [comments]="instrument.comments" (newComment)="addComment($event)"></app-comments>
 </div>

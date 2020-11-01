@@ -8,18 +8,30 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
-  declarations: [AppComponent, MarketplaceComponent, LoginComponent, RegisterComponent, NavbarComponent],
+  declarations: [
+    AppComponent,
+    MarketplaceComponent,
+    LoginComponent,
+    RegisterComponent,
+    NavbarComponent,
+    ContactUsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    FontAwesomeModule,
+    AngularFireStorageModule,
+    ReactiveFormsModule,
+    ClickOutsideModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

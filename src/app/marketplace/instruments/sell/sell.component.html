@@ -1,0 +1,8 @@
+<div class="fixed h-10 w-full bg-blue-500 flex justify-around">
+  <button class="text-gray-200 w-full" (click)="switchView('list')">List</button>
+  <button class="text-gray-200 w-full" (click)="switchView('create')">Create</button>
+</div>
+<div class="pt-10">
+  <app-list-sell-instruments *ngIf="sellOption === 'list'"></app-list-sell-instruments>
+  <app-create-sell-instrument *ngIf="sellOption === 'create'"></app-create-sell-instrument>
+</div>

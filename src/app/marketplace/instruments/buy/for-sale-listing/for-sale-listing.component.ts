@@ -1,20 +1,19 @@
 import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import {
-  Finish,
-  ForSaleListing,
-  TubaSize,
-} from '@nater20k/brass-exchange-instruments';
+import { Finish, ForSaleListing, TubaSize } from '@nater20k/brass-exchange-instruments';
 
 @Component({
   selector: 'app-for-sale-listing',
   templateUrl: './for-sale-listing.component.html',
   styleUrls: ['./for-sale-listing.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForSaleListingComponent {
   @Input() instrument: ForSaleListing;
   titleCasePipe = new TitleCasePipe();
+
+  get instrumentId(): string {
+    return this.instrument.id;
+  }
 
   get brand(): string {
     return this.titleCasePipe.transform(this.instrument.brand);
@@ -25,9 +24,7 @@ export class ForSaleListingComponent {
   }
 
   get brandModel(): string {
-    return this.brand && this.model
-      ? `${this.brand} - ${this.model}`
-      : this.brand;
+    return this.brand && this.model ? `${this.brand} - ${this.model}` : this.brand;
   }
 
   get type(): string {
@@ -74,5 +71,9 @@ export class ForSaleListingComponent {
 
   get views(): number {
     return this.instrument.views;
+  }
+
+  get sellerEmail(): string {
+    return this.instrument.sellerEmail;
   }
 }

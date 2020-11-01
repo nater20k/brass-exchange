@@ -7,10 +7,7 @@ import { auth } from 'firebase/app';
   providedIn: 'root',
 })
 export class UserAdapterService {
-  mapUserFromRegister(
-    user: auth.UserCredential,
-    userFormGroup?: UserFormGroup
-  ): User {
+  mapUserFromRegister(user: auth.UserCredential, userFormGroup?: UserFormGroup): User {
     return userFormGroup
       ? {
           ...this.mapFormGroupUser(userFormGroup),
@@ -19,36 +16,36 @@ export class UserAdapterService {
       : this.mapFullFirebaseUser(user);
   }
 
-  private mapPartialFirebaseUser(user: auth.UserCredential) {
+  mapPartialFirebaseUser({ user }: auth.UserCredential) {
     return {
-      uid: user.user.uid,
-      displayName: user.user.displayName,
-      email: user.user.email,
-      dateAccountCreated: new Date(user.user.metadata.creationTime),
-      photoUrl: user.user.photoURL,
+      uid: user.uid,
+      email: user.email,
+      dateAccountCreated: new Date(user.metadata.creationTime),
+      photoUrl: user.photoURL,
     };
   }
 
-  private mapFullFirebaseUser(user: auth.UserCredential) {
+  private mapFullFirebaseUser({ user, additionalUserInfo }: auth.UserCredential) {
     return {
-      uid: user.user.uid,
-      displayName: user.user.displayName,
-      firstName: user.additionalUserInfo.profile['given_name'],
-      lastName: user.additionalUserInfo.profile['family_name'],
-      email: user.user.email,
-      dateAccountCreated: new Date(user.user.metadata.creationTime),
-      photoUrl: user.user.photoURL,
+      uid: user.uid,
+      displayName: user.displayName,
+      firstName: additionalUserInfo.profile['given_name'],
+      lastName: additionalUserInfo.profile['family_name'],
+      email: user.email,
+      dateAccountCreated: new Date(user.metadata.creationTime),
+      photoUrl: user.photoURL,
       principalInstrument: '',
       instrumentsListed: [],
       rating: 0,
     };
   }
 
-  private mapFormGroupUser(userFormGroup: UserFormGroup) {
+  private mapFormGroupUser({ firstName, lastName, principalInstrument, displayName }: UserFormGroup) {
     return {
-      firstName: userFormGroup.firstName,
-      lastName: userFormGroup.lastName,
-      principalInstrument: userFormGroup.principalInstrument,
+      firstName,
+      lastName,
+      displayName,
+      principalInstrument,
       instrumentsListed: [],
       rating: 0,
     };

@@ -1,0 +1,24 @@
+<div *ngIf="imageUrls$ | async as imageUrls">
+  <app-loading *ngIf="!isAllPageLoaded"></app-loading>
+  <ng-container class="w-full bg-white" *ngIf="!isHeroImage">
+    <drag-scroll class="bg-white">
+      <img
+        drag-scroll-item
+        class="h-auto object-fill"
+        (load)="toggleImagesLoaded()"
+        *ngFor="let imageUrl of imageUrls"
+        src="{{ imageUrl }}"
+        alt="Instrument Image"
+      />
+    </drag-scroll>
+  </ng-container>
+
+  <ng-container class="w-full" *ngIf="isHeroImage">
+    <img
+      (load)="toggleImagesLoaded()"
+      class="object-contain h-30 w-full"
+      src="{{ imageUrls[0] }}"
+      alt="Instrument Image"
+    />
+  </ng-container>
+</div>

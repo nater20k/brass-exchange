@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 

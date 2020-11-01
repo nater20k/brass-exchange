@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Instrument } from '@nater20k/brass-exchange-instruments';
+import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
 import { Observable, from, of } from 'rxjs';
 import { map, switchMap, take, catchError } from 'rxjs/operators';
@@ -14,16 +14,12 @@ export class UserApiService {
 
   // Create
   createUser(user: User): Observable<DocumentReference | void> {
-    return from(
-      user.uid ? this.afsPath.doc(user.uid).set(user) : this.afsPath.add(user)
-    );
+    return from(user.uid ? this.afsPath.doc(user.uid).set(user) : this.afsPath.add(user));
   }
 
   // Read
   getAllUsers(): Observable<User[]> {
-    return this.afsPath
-      .valueChanges({ idField: 'id' })
-      .pipe(catchError(() => of(null)));
+    return this.afsPath.valueChanges({ idField: 'id' }).pipe(catchError(() => of(null)));
   }
 
   getSingleUser(userId: string): Observable<User> {
@@ -62,10 +58,7 @@ export class UserApiService {
   // INSTRUMENTS BY USER
   // Create
 
-  addFavoritedInstrumentToUser(
-    userId: string,
-    instrument: Instrument
-  ): Observable<void> {
+  addFavoritedInstrumentToUser(userId: string, instrument: Instrument): Observable<void> {
     return this.getSingleUser(userId).pipe(
       switchMap((user) => {
         user.favoritedInstruments.push(instrument);
@@ -77,6 +70,10 @@ export class UserApiService {
   }
 
   // Read
+  getInstrumentsForSaleByUser(userId: string): Observable<ForSaleListing[]> {
+    return this.getSingleUser(userId).pipe(map((user) => user.instrumentsListed));
+  }
+
   getFavoritedInstrumentsByUserId(userId: string): Observable<Instrument[]> {
     return this.afsPath
       .doc<User>(userId)
