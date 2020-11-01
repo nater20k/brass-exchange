@@ -1,9 +1,9 @@
 <div
   (click)="showComments = !showComments"
-  class="flex justify-between px-8 py-1 rounded-lg bg-blue-500 shadow-md mx-8 text-gray-100 align-middle"
+  class="flex justify-between px-8 py-1 rounded-lg bg-blue-500 shadow-md mx-8 text-gray-100 align-middle h-8 mb-4"
 >
-  <p *ngIf="!showComments">See comments</p>
-  <p *ngIf="showComments">Hide comments</p>
+  <p class="inline-block" *ngIf="!showComments">Comments</p>
+  <p *ngIf="showComments">Comments</p>
   <img *ngIf="!showComments" class="w-4" src="../../../assets/icons/add-plus-button-white.svg" alt="" />
   <img *ngIf="showComments" class="w-4" src="../../../assets/icons/horizontal-line-remove-button-white.svg" alt="" />
 </div>
@@ -13,7 +13,7 @@
     class="box-border p-4 shadow-md mb-4 border-gray-500 rounded-lg mt-4 bg-indigo-100"
     *ngFor="let comment of comments"
   >
-    <div class="flex justify-between border-b-2 border-gray-400">
+    <div class="flex justify-between border-b-2 border-gray-400 px-2">
       <div>
         {{ comment.username }}
       </div>
@@ -21,7 +21,7 @@
         {{ comment.createdDate.toDate() | date: 'short' }}
       </div>
     </div>
-    <div class="text-gray-800 pt-4 text-sm">
+    <div class="text-gray-800 pt-4 text-sm px-2">
       {{ comment.content }}
     </div>
   </div>

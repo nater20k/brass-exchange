@@ -19,7 +19,6 @@ export class UserAdapterService {
   mapPartialFirebaseUser({ user }: auth.UserCredential) {
     return {
       uid: user.uid,
-      displayName: user.displayName,
       email: user.email,
       dateAccountCreated: new Date(user.metadata.creationTime),
       photoUrl: user.photoURL,

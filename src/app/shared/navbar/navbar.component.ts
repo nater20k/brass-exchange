@@ -26,7 +26,11 @@ export class NavbarComponent implements OnInit {
       });
   }
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
+  toggleMenu(option?: boolean) {
+    if (option != undefined) {
+      this.isMenuOpen = option;
+    } else {
+      this.isMenuOpen = !this.isMenuOpen;
+    }
   }
 }
