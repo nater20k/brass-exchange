@@ -7,10 +7,11 @@ import { InputComponent } from './input/input.component';
 import { ImageComponent } from './image/image.component';
 import { LoadingComponent } from './loading/loading.component';
 import { DragScrollModule } from 'ngx-drag-scroll';
+import { InfoBarComponent } from './info-bar/info-bar.component';
 
 @NgModule({
-  declarations: [CommentsComponent, ForSaleListingComponent, InputComponent, ImageComponent, LoadingComponent],
+  declarations: [CommentsComponent, ForSaleListingComponent, InputComponent, ImageComponent, LoadingComponent, InfoBarComponent],
   imports: [CommonModule, ReactiveFormsModule, DragScrollModule],
-  exports: [CommentsComponent, ForSaleListingComponent, InputComponent, ImageComponent, LoadingComponent],
+  exports: [CommentsComponent, ForSaleListingComponent, InputComponent, ImageComponent, LoadingComponent, InfoBarComponent],
 })
 export class SharedModule {}
