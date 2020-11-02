@@ -47,8 +47,7 @@ export class AuthService {
 
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       switchMap((user) => this.updateUserData(user, userFormGroup)),
-      take(1),
-      catchError(() => of(null))
+      take(1)
     );
   }
 
