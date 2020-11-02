@@ -1,3 +1,6 @@
+<div class="text-center text-lg border-b-1 border-gray-300 mt-4">
+  <h2>Personal Listings</h2>
+</div>
 <div *ngFor="let instrument of instrumentsList | async">
-  <app-for-sale-listing [instrument]="instrument"></app-for-sale-listing>
+  <app-for-sale-listing (click)="navigateToDetail(instrument.id)" [instrument]="instrument"></app-for-sale-listing>
 </div>
