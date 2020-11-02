@@ -41,10 +41,7 @@ export class UserApiService {
 
   // Update
   updateUser(user: Partial<User>): Observable<void> {
-    return from(this.afsPath.doc(user.uid).update(user)).pipe(
-      take(1),
-      catchError(() => of(null))
-    );
+    return from(this.afsPath.doc(user.uid).update(user)).pipe(take(1));
   }
 
   // Delete
@@ -57,6 +54,16 @@ export class UserApiService {
 
   // INSTRUMENTS BY USER
   // Create
+
+  addToPersonalInstrumentsListed(userId: string, forSaleListing: ForSaleListing): Observable<void> {
+    return this.getSingleUser(userId).pipe(
+      map((user) => {
+        user.instrumentsListed.push(forSaleListing);
+        return user;
+      }),
+      switchMap((user) => this.updateUser(user))
+    );
+  }
 
   addFavoritedInstrumentToUser(userId: string, instrument: Instrument): Observable<void> {
     return this.getSingleUser(userId).pipe(
