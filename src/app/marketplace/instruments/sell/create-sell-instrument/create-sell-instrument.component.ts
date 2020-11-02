@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DocumentReference } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { Event } from '@angular/router';
@@ -9,12 +10,13 @@ import {
   ForSaleInstrumentListingFormGroup,
   InstrumentAdapterService,
 } from '@nater20k/brass-exchange-instruments';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
 import { SubscriptionManager } from 'src/app/services/subscription-manager';
 import { UploadService } from 'src/app/services/upload/upload.service';
+import { UserApiService } from 'src/app/services/users/user-api.service';
 
 @Component({
   selector: 'app-create-sell-instrument',
@@ -36,7 +38,8 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
     private instrumentApi: InstrumentApiService,
     private storage: UploadService,
     private auth: AuthService,
-    private instrumentAdapter: InstrumentAdapterService
+    private instrumentAdapter: InstrumentAdapterService,
+    private userApi: UserApiService
   ) {
     super();
   }
@@ -69,12 +72,19 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
     const instrument = this.instrumentAdapter.mapInstrumentForSaleFromInstrumentForSaleFormGroup(
       this.createSellFormGroup
     );
-    this.addSub = this.instrumentApi
-      .createForSaleInstrument(instrument)
+
+    this.auth.user$
       .pipe(
-        switchMap((instrument) => {
-          newInstrumentId = instrument.id;
-          return this.uploadPhoto(newInstrumentId);
+        take(1),
+        switchMap((user) => {
+          return this.instrumentApi.createForSaleInstrument(instrument).pipe(
+            switchMap((forSale) => {
+              return this.uploadPhoto(forSale.id).pipe(map(() => forSale.id));
+            }),
+            switchMap((id) => {
+              return this.userApi.addToPersonalInstrumentsListed(user.uid, { ...instrument, id });
+            })
+          );
         })
       )
       .subscribe();
@@ -101,10 +111,5 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
 
   clickUploadWorkaround() {
     document.getElementById('file').click();
-  }
-
-  formatPrice(event) {
-    console.log(event);
-    this.createSellFormGroup.formGroup.get('price');
   }
 }

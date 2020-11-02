@@ -23,7 +23,6 @@ export class CommentsComponent implements OnInit {
 
   addComment(): void {
     this.authService.user$.pipe(take(1)).subscribe((user: User) => {
-      console.log(user);
       this.newComment.emit(this.adaptFormToComment(user.displayName));
       this.commentForm = this.buildForm();
     });
@@ -39,7 +38,6 @@ export class CommentsComponent implements OnInit {
   }
 
   private adaptFormToComment(username: string): Comment {
-    console.log(username, this.commentForm.get('content').value);
     return {
       content: this.commentForm.get('content').value,
       username,
