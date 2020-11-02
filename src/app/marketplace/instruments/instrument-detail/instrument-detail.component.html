@@ -20,6 +20,7 @@
         <li *ngIf="instrument.views"><span class="bold">Views:</span> {{ instrument.views }}</li>
       </ul>
     </div>
+    <p class="p-4 text-sm">{{ instrument.description }}</p>
   </div>
   <app-comments [comments]="instrument.comments" (newComment)="addComment($event)"></app-comments>
 </div>

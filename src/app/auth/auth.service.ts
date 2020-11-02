@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { DocumentReference } from '@angular/fire/firestore';
 
 import { Observable, of, from } from 'rxjs';
 import { switchMap, take, catchError, tap, map } from 'rxjs/operators';
@@ -17,7 +17,6 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afs: AngularFirestore,
     private userAdapter: UserAdapterService,
     private userApiService: UserApiService
   ) {
@@ -53,11 +52,10 @@ export class AuthService {
     );
   }
 
-  emailSignIn(params: UserFormGroup): Observable<User> {
+  emailSignIn(params: UserFormGroup): Observable<User | Error> {
     return from(this.afAuth.signInWithEmailAndPassword(params.email, params.password)).pipe(
       switchMap((user) => this.fetchFirestoreUser(user)),
-      take(1),
-      catchError(() => of(null))
+      take(1)
     );
   }
 
@@ -79,9 +77,8 @@ export class AuthService {
     user: auth.UserCredential,
     userFormGroup?: UserFormGroup
   ): Observable<void | DocumentReference> {
-    return this.userApiService.createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup)).pipe(
-      tap(console.log),
-      catchError(() => of(null))
-    );
+    return this.userApiService
+      .createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup))
+      .pipe(catchError(() => of(null)));
   }
 }

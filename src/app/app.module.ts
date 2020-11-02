@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     AngularFirestoreModule,
     AngularFireStorageModule,
     ReactiveFormsModule,
+    ClickOutsideModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

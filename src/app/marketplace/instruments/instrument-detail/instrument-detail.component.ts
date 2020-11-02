@@ -24,7 +24,7 @@ export class InstrumentDetailComponent implements OnInit {
     this.instrument$ = this.instrumentApi.getInstrumentById(this.router.url.split('/')[3]);
   }
 
-  addComment(comment: Comment) {
+  addComment(comment: Comment): void {
     this.instrumentApi.addCommentToForSaleListing(comment, this.router.url.split('/')[3]).pipe(take(1)).subscribe();
   }
 }

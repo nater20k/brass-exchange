@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
-import { take } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
@@ -13,8 +14,9 @@ import { AuthService } from '../auth.service';
 export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
   loggedOut = false;
+  loginError = false;
+
   constructor(
-    private fb: FormBuilder,
     public authService: AuthService,
     private navService: NavigationService,
     private formService: UserFormBuilderService
@@ -24,7 +26,7 @@ export class LoginComponent implements OnInit {
     this.initialize();
   }
 
-  initialize() {
+  initialize(): void {
     this.authService.user$.pipe(take(1)).subscribe((user) => {
       if (!user) {
         this.loginFormGroup = this.formService.emailAndPasswordLoginForm();
@@ -35,18 +37,23 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  emailLogin() {
+  emailLogin(): void {
+    this.loginError = false;
     const userLogin = new UserFormGroup(this.loginFormGroup);
-
     this.authService
       .emailSignIn(userLogin)
       .pipe(take(1))
-      .subscribe(() => {
-        this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
-      });
+      .subscribe(
+        () => this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME),
+        () => {
+          this.loginError = true;
+          this.loginFormGroup.reset();
+        },
+        () => {}
+      );
   }
 
-  googleLogin() {
+  googleLogin(): void {
     this.authService
       .googleSignIn()
       .pipe(take(1))
@@ -55,11 +62,11 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  get email() {
+  get email(): AbstractControl {
     return this.loginFormGroup.get('email');
   }
 
-  get password() {
+  get password(): AbstractControl {
     return this.loginFormGroup.get('password');
   }
 }

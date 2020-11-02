@@ -55,13 +55,13 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
   uploadPhoto(instrumentId: string) {
     return this.auth.user$.pipe(take(1)).pipe(
       tap((user) => {
-        this.storage.upload(this.images, user.email, `/instruments/${instrumentId}`);
+        this.storage.uploadAll({ files: this.images, userEmail: user.email, filePath: `/instruments/${instrumentId}` });
       })
     );
   }
 
   stagePhotos(event: any) {
-    this.images = (<HTMLInputElement>event.target).files;
+    this.images = (event.target as HTMLInputElement).files;
   }
 
   submitCreateSell() {
@@ -101,5 +101,10 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
 
   clickUploadWorkaround() {
     document.getElementById('file').click();
+  }
+
+  formatPrice(event) {
+    console.log(event);
+    this.createSellFormGroup.formGroup.get('price');
   }
 }

@@ -9,6 +9,7 @@
     }
   },
   "projects": {
-    "default": "brass-exchange-dev"
+    "default": "brass-exchange-dev",
+    "prod": "brass-exchange-prod"
   }
 }
