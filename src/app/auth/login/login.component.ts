@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
-import { take } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
@@ -13,6 +14,8 @@ import { AuthService } from '../auth.service';
 export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
   loggedOut = false;
+  loginError = false;
+
   constructor(
     public authService: AuthService,
     private navService: NavigationService,
@@ -35,14 +38,19 @@ export class LoginComponent implements OnInit {
   }
 
   emailLogin(): void {
+    this.loginError = false;
     const userLogin = new UserFormGroup(this.loginFormGroup);
-
     this.authService
       .emailSignIn(userLogin)
       .pipe(take(1))
-      .subscribe(() => {
-        this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
-      });
+      .subscribe(
+        () => this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME),
+        () => {
+          this.loginError = true;
+          this.loginFormGroup.reset();
+        },
+        () => {}
+      );
   }
 
   googleLogin(): void {
