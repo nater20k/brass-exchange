@@ -12,4 +12,8 @@ export class InfoBarComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  contactSeller() {
+    alert('Contact Seller');
+  }
 }
