@@ -65,7 +65,7 @@ export class UserApiService {
     );
   }
 
-  addFavoritedInstrumentToUser(userId: string, instrument: Instrument): Observable<void> {
+  addFavoritedInstrumentToUser(userId: string, instrument: ForSaleListing): Observable<void> {
     return this.getSingleUser(userId).pipe(
       switchMap((user) => {
         user.favoritedInstruments.push(instrument);

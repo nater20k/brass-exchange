@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { DocumentReference } from '@angular/fire/firestore';
 
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   googleSignIn(): Observable<User> {
-    const provider = new auth.GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
     return from(this.afAuth.signInWithPopup(provider)).pipe(
       switchMap((user) => from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))),
@@ -58,7 +58,7 @@ export class AuthService {
     );
   }
 
-  private fetchFirestoreUser(user: auth.UserCredential): Observable<User> {
+  private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
     return this.userApiService.getSingleUser(user.user.uid).pipe(
       take(1),
       catchError(() => of(null))
@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   private updateUserData(
-    user: auth.UserCredential,
+    user: firebase.auth.UserCredential,
     userFormGroup?: UserFormGroup
   ): Observable<void | DocumentReference> {
     return this.userApiService
