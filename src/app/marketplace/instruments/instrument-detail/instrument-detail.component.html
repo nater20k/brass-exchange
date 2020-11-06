@@ -21,7 +21,7 @@
           <li *ngIf="instrument.views"><span class="bold">Views:</span> {{ instrument.views }}</li>
         </ul>
       </div>
-      <app-info-bar></app-info-bar>
+      <app-info-bar [forSaleListing]="instrument"></app-info-bar>
     </div>
     <p *ngIf="instrument.description" class="p-4 text-sm">{{ instrument.description }}</p>
   </div>
