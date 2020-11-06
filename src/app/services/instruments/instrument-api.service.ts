@@ -111,4 +111,26 @@ export class InstrumentApiService {
       })
     );
   }
+
+  // FAVORITES SECTION
+
+  addFavoriteToForSaleListing(instrumentId: string): Observable<void> {
+    return this.getInstrumentById(instrumentId).pipe(
+      take(1),
+      switchMap((instrument) => {
+        instrument?.favorites ? (instrument.favorites += 1) : (instrument.favorites = 1);
+        return this.updateForSaleListing(instrument);
+      })
+    );
+  }
+
+  removeFavoriteToForSaleListing(instrumentId: string): Observable<void> {
+    return this.getInstrumentById(instrumentId).pipe(
+      take(1),
+      switchMap((instrument) => {
+        instrument?.favorites ? (instrument.favorites -= 1) : (instrument.favorites = 0);
+        return this.updateForSaleListing(instrument);
+      })
+    );
+  }
 }
