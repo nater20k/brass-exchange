@@ -23,7 +23,6 @@ export class ImageComponent implements OnInit {
   ngOnInit(): void {
     this.images = document.getElementsByTagName<'img'>('img');
     this.imageUrls$ = this.fetchImageUrls({ id: this.instrumentId, sellerEmail: this.sellerEmail }).pipe(
-      tap(console.log),
       finalize(() => (this.isLoaded = true))
     );
   }
@@ -38,7 +37,9 @@ export class ImageComponent implements OnInit {
   }
 
   private setImagesToBlock() {
-    for (let i = 0; i < this.images.length; i++) { this.images[i].style.display = 'inline-block'; }
+    for (let i = 0; i < this.images.length; i++) {
+      this.images[i].style.display = 'inline-block';
+    }
   }
 
   get isAllPageLoaded() {

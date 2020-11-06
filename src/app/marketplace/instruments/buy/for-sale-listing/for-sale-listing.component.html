@@ -4,16 +4,12 @@
     <app-image [isHeroImage]="true" [sellerEmail]="sellerEmail" [instrumentId]="instrumentId"></app-image>
     <div class="content flex justify-between p-4 bg-indigo-200">
       <ul class="left">
-        <li><span class="bold">Type:</span> {{ type | titlecase }}</li>
+        <li><span class="bold"></span> {{ type | titlecase }}</li>
         <li *ngIf="key"><span class="bold">Key:</span> {{ key }}</li>
-        <li *ngIf="size"><span class="bold">Size:</span> {{ size }}</li>
-        <li><span class="bold">Shipping:</span> {{ isShippingAvailable }}</li>
       </ul>
       <ul class="right">
         <li><span class="bold">Price:</span> ${{ price }}</li>
-        <li *ngIf="boreSize"><span class="bold">Bore Size:</span> {{ boreSize }}</li>
         <li *ngIf="finish"><span class="bold">Finish:</span> {{ finish | titlecase }}</li>
-        <li *ngIf="views"><span class="bold">Views:</span> {{ views }}</li>
       </ul>
     </div>
   </div>

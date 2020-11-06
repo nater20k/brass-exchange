@@ -41,10 +41,7 @@ export class UserApiService {
 
   // Update
   updateUser(user: Partial<User>): Observable<void> {
-    return from(this.afsPath.doc(user.uid).update(user)).pipe(
-      take(1),
-      catchError(() => of(null))
-    );
+    return from(this.afsPath.doc(user.uid).update(user)).pipe(take(1));
   }
 
   // Delete
@@ -56,16 +53,14 @@ export class UserApiService {
   }
 
   // INSTRUMENTS BY USER
-  // Create
 
-  addFavoritedInstrumentToUser(userId: string, instrument: Instrument): Observable<void> {
+  addToPersonalInstrumentsListed(userId: string, forSaleListing: ForSaleListing): Observable<void> {
     return this.getSingleUser(userId).pipe(
-      switchMap((user) => {
-        user.favoritedInstruments.push(instrument);
-        return this.updateUser(user);
+      map((user) => {
+        user.instrumentsListed.push(forSaleListing);
+        return user;
       }),
-      take(1),
-      catchError(() => of(null))
+      switchMap((user) => this.updateUser(user))
     );
   }
 
@@ -82,5 +77,29 @@ export class UserApiService {
         map((user) => user.favoritedInstruments),
         catchError(() => of(null))
       );
+  }
+
+  // FAVORITES SECTION
+
+  addFavoritedInstrumentToUser(userId: string, instrument: ForSaleListing): Observable<void> {
+    return this.getSingleUser(userId).pipe(
+      switchMap((user) => {
+        user?.favoritedInstruments
+          ? user.favoritedInstruments.push(instrument)
+          : (user.favoritedInstruments = [instrument]);
+        return this.updateUser(user);
+      })
+    );
+  }
+
+  removeFavoritedInstrumentFromUser(userId: string, forSaleListing: ForSaleListing): Observable<void> {
+    return this.getSingleUser(userId).pipe(
+      switchMap((user) => {
+        const remainingFavorites = user.favoritedInstruments.filter(
+          (instrument) => instrument.id !== forSaleListing.id
+        );
+        return this.updateUser({ ...user, favoritedInstruments: remainingFavorites });
+      })
+    );
   }
 }

@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit {
   submitRegistration(): void {
     this.authService
       .emailRegister(this.registrationFormGroup)
-      .pipe(tap((res) => console.log(res)))
       .subscribe(() => this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME));
   }
 }

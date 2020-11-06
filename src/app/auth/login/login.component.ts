@@ -62,6 +62,10 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  forgotPassword() {
+    alert('TODO');
+  }
+
   get email(): AbstractControl {
     return this.loginFormGroup.get('email');
   }

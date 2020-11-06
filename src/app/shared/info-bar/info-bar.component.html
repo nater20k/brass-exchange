@@ -1,0 +1,12 @@
+<div class="bg-blue-500 py-2 px-2 flex justify-between h-12 rounded-b-md">
+  <!-- Contact Seller/Request more info -->
+  <div class="ml-2" (click)="contactSeller()">
+    <img class="w-8" src="../../../assets/icons/email.svg" alt="" />
+  </div>
+
+  <!-- Favorites -->
+  <div class="flex justify-between text-white" (click)="augmentFavorite()">
+    <img class="w-8 mr-1" src="../../../assets/icons/favorite-heart-button.svg" alt="" />
+    <p class="mr-2 text-xl font-bold">{{ forSaleListing.favorites }}</p>
+  </div>
+</div>
