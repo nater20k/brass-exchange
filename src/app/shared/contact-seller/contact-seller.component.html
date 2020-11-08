@@ -1,0 +1,17 @@
+<div class="rounded-b-md">
+  <form [formGroup]="contactSellerData.formGroup" (ngSubmit)="sendMessageToSeller()">
+    <div class="text-center">
+      <label class="block py-2" for="content">Message</label>
+      <textarea class="w-3/4 rounded-md shadow-md" formControlName="messageContent" name="content"></textarea>
+    </div>
+    <div class="flex justify-around p-4">
+      <button class="rounded-lg px-8 py-2 bg-red-500 text-white shadow-md mx-4" (click)="clearForm()">Clear</button>
+      <button
+        class="rounded-lg px-8 py-2 bg-blue-500 text-white shadow-md mx-4"
+        [disabled]="!contactSellerData.formGroup.get('messageContent').valid"
+      >
+        Send
+      </button>
+    </div>
+  </form>
+</div>
