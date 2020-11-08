@@ -11,3 +11,9 @@
     <p class="mr-2 text-xl font-bold">{{ forSaleListing.favorites }}</p>
   </div>
 </div>
+<app-contact-seller
+  [inquirerEmail]="user.email"
+  [sellerEmail]="forSaleListing.sellerEmail"
+  [instrumentId]="forSaleListing.id"
+  *ngIf="displayContactSeller"
+></app-contact-seller>

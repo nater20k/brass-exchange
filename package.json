@@ -24,7 +24,7 @@
     "@angular/router": "~10.1.4",
     "@nater20k/brass-exchange-constants": "^1.0.0",
     "@nater20k/brass-exchange-instruments": "^1.0.0",
-    "@nater20k/brass-exchange-users": "^1.0.10",
+    "@nater20k/brass-exchange-users": "^1.0.13",
     "@nater20k/form-control": "^1.0.0",
     "firebase": "^8.0.0",
     "ng-click-outside": "^7.0.0",

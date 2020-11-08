@@ -3,7 +3,7 @@ import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
 import { Observable, from, of } from 'rxjs';
-import { map, switchMap, take, catchError } from 'rxjs/operators';
+import { map, switchMap, take, catchError, tap, first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -33,10 +33,14 @@ export class UserApiService {
   }
 
   getUserByEmail(email: string): Observable<User> {
-    return this.afsPath.valueChanges().pipe(
-      map((users) => users.find((user) => (user.email = email))),
-      catchError(() => of(null))
-    );
+    return this.afs
+      .collection<User>('users', (ref) => ref.where('email', '==', email))
+      .valueChanges()
+      .pipe(
+        tap(console.log),
+        map((users) => users[0]),
+        tap(console.log)
+      );
   }
 
   // Update

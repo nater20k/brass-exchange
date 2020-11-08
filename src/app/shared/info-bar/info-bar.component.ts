@@ -15,6 +15,7 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
 export class InfoBarComponent implements OnInit {
   @Input() forSaleListing: ForSaleListing;
   isFavorited = false;
+  displayContactSeller = false;
   user: User;
   // @Output()
   constructor(
@@ -31,7 +32,7 @@ export class InfoBarComponent implements OnInit {
   }
 
   contactSeller() {
-    alert('Contact Seller');
+    this.displayContactSeller = !this.displayContactSeller;
   }
 
   augmentFavorite() {
