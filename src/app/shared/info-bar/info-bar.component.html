@@ -6,7 +6,14 @@
 
   <!-- Favorites -->
   <div class="flex justify-between text-white" (click)="augmentFavorite()">
-    <img class="w-8 mr-1" src="../../../assets/icons/favorite-heart-button.svg" alt="" />
+    <img *ngIf="isFavorited" class="w-8 mr-1" src="../../../assets/icons/heart-pink.svg" alt="" />
+    <img *ngIf="!isFavorited" class="w-8 mr-1" src="../../../assets/icons/favorite-heart-button.svg" alt="" />
     <p class="mr-2 text-xl font-bold">{{ forSaleListing.favorites }}</p>
   </div>
 </div>
+<app-contact-seller
+  [inquirerEmail]="user.email"
+  [sellerEmail]="forSaleListing.sellerEmail"
+  [instrumentId]="forSaleListing.id"
+  *ngIf="displayContactSeller"
+></app-contact-seller>

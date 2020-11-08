@@ -36,7 +36,7 @@ export class AuthService {
 
     return from(this.afAuth.signInWithPopup(provider)).pipe(
       switchMap((user) => from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))),
-
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)),
       take(1),
       catchError(() => of(null))
     );
@@ -47,6 +47,7 @@ export class AuthService {
 
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       switchMap((user) => this.updateUserData(user, userFormGroup)),
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)),
       take(1)
     );
   }
@@ -54,6 +55,7 @@ export class AuthService {
   emailSignIn(params: UserFormGroup): Observable<User | Error> {
     return from(this.afAuth.signInWithEmailAndPassword(params.email, params.password)).pipe(
       switchMap((user) => this.fetchFirestoreUser(user)),
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)),
       take(1)
     );
   }

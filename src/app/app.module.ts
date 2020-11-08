@@ -14,6 +14,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
     RegisterComponent,
     NavbarComponent,
     ContactUsComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
