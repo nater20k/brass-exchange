@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
-import { of } from 'rxjs';
-import { catchError, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
@@ -62,7 +61,7 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  forgotPassword() {
+  forgotPassword(): void {
     alert('TODO');
   }
 

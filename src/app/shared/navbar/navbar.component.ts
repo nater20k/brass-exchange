@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
@@ -8,15 +8,12 @@ import { LOCATIONS, NavigationService } from 'src/app/services/navigation/naviga
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   @Input() authenticated = false;
   isMenuOpen = false;
   constructor(public auth: AuthService, private navService: NavigationService) {}
 
-  ngOnInit(): void {}
-  login() {}
-
-  logout() {
+  logout(): void {
     this.auth
       .signOut()
       .pipe(take(1))
@@ -26,8 +23,8 @@ export class NavbarComponent implements OnInit {
       });
   }
 
-  toggleMenu(option?: boolean) {
-    if (option != undefined) {
+  toggleMenu(option?: boolean): void {
+    if (option !== undefined) {
       this.isMenuOpen = option;
     } else {
       this.isMenuOpen = !this.isMenuOpen;
