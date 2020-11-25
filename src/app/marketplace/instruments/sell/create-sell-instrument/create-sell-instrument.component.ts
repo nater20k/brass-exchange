@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentReference } from '@angular/fire/firestore';
-import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { Event } from '@angular/router';
+import { AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
 import { BE } from '@nater20k/brass-exchange-constants';
 import {
   Finish,
@@ -10,7 +7,8 @@ import {
   ForSaleInstrumentListingFormGroup,
   InstrumentAdapterService,
 } from '@nater20k/brass-exchange-instruments';
-import { forkJoin, Observable } from 'rxjs';
+import { User } from '@nater20k/brass-exchange-users';
+import { Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
@@ -52,10 +50,10 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
     this.createSellFormGroup = new ForSaleInstrumentListingFormGroup(
       this.formBuilderService.createInstrumentForSaleFormGroup()
     );
-    this.addUserEmailToForm();
+    this.addUserEmailToForm().subscribe();
   }
 
-  uploadPhoto(instrumentId: string) {
+  uploadPhoto(instrumentId: string): Observable<User> {
     return this.auth.user$.pipe(take(1)).pipe(
       tap((user) => {
         this.storage.uploadAll({ files: this.images, userEmail: user.email, filePath: `/instruments/${instrumentId}` });
@@ -63,12 +61,11 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
     );
   }
 
-  stagePhotos(event: any) {
+  stagePhotos(event: any): void {
     this.images = (event.target as HTMLInputElement).files;
   }
 
-  submitCreateSell() {
-    let newInstrumentId = '';
+  submitCreateSell(): void {
     const instrument = this.instrumentAdapter.mapInstrumentForSaleFromInstrumentForSaleFormGroup(
       this.createSellFormGroup
     );
@@ -90,13 +87,11 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
       .subscribe();
   }
 
-  addUserEmailToForm() {
-    this.addSub = this.auth.user$
-      .pipe(
-        take(1),
-        tap((user) => this.createSellFormGroup.formGroup.patchValue({ sellerEmail: user.email }))
-      )
-      .subscribe();
+  addUserEmailToForm(): Observable<User> {
+    return this.auth.user$.pipe(
+      take(1),
+      tap((user) => this.createSellFormGroup.formGroup.patchValue({ sellerEmail: user.email }))
+    );
   }
 
   clearForm(): void {
@@ -109,7 +104,7 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
     this.showAddDetails = !this.showAddDetails;
   }
 
-  clickUploadWorkaround() {
+  clickUploadWorkaround(): void {
     document.getElementById('file').click();
   }
 }

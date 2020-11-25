@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { BE } from '@nater20k/brass-exchange-constants';
-import {
-  ForSaleListing,
-  Instrument,
-  Comment,
-  ForSaleInstrumentListingFormGroup,
-} from '@nater20k/brass-exchange-instruments';
+import { Comment, ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -102,7 +97,7 @@ export class InstrumentApiService {
 
   // COMMENT SECTION
 
-  addCommentToForSaleListing(comment: Comment, instrumentId: string) {
+  addCommentToForSaleListing(comment: Comment, instrumentId: string): Observable<void> {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
       switchMap((instrument) => {

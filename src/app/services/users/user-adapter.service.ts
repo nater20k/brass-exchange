@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '@nater20k/brass-exchange-users';
-import { UserFormGroup } from '@nater20k/brass-exchange-users';
+import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 
 @Injectable({
@@ -16,7 +15,7 @@ export class UserAdapterService {
       : this.mapFullFirebaseUser(user);
   }
 
-  mapPartialFirebaseUser({ user }: firebase.auth.UserCredential) {
+  private mapPartialFirebaseUser({ user }: firebase.auth.UserCredential): any {
     return {
       uid: user.uid,
       email: user.email,
@@ -25,7 +24,7 @@ export class UserAdapterService {
     };
   }
 
-  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential) {
+  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential): any {
     return {
       uid: user.uid,
       displayName: user.displayName,
@@ -40,7 +39,7 @@ export class UserAdapterService {
     };
   }
 
-  private mapFormGroupUser({ firstName, lastName, principalInstrument, displayName }: UserFormGroup) {
+  private mapFormGroupUser({ firstName, lastName, principalInstrument, displayName }: UserFormGroup): any {
     return {
       firstName,
       lastName,

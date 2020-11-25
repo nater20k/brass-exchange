@@ -19,11 +19,11 @@ export class ListSellInstrumentsComponent implements OnInit {
     private navService: NavigationService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchInstrumentsListedByUser();
   }
 
-  fetchInstrumentsListedByUser() {
+  fetchInstrumentsListedByUser(): void {
     this.instrumentsList = this.authService.user$.pipe(
       switchMap((user) => this.userApi.getInstrumentsForSaleByUser(user.uid))
     );

@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ForSaleListing } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
-import { forkJoin, of } from 'rxjs';
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
@@ -17,7 +17,6 @@ export class InfoBarComponent implements OnInit {
   isFavorited = false;
   displayContactSeller = false;
   user: User;
-  // @Output()
   constructor(
     private auth: AuthService,
     private userApi: UserApiService,
@@ -31,14 +30,14 @@ export class InfoBarComponent implements OnInit {
     });
   }
 
-  contactSeller() {
+  contactSeller(): void {
     this.displayContactSeller = !this.displayContactSeller;
   }
 
-  augmentFavorite() {
+  augmentFavorite(): void {
     const localIsFavorited = this.isFavorited;
     this.isFavorited = !this.isFavorited;
-    return forkJoin({
+    forkJoin({
       augmentedFavoriteCount: localIsFavorited
         ? this.instrumentApi.removeFavoriteToForSaleListing(this.forSaleListing.id)
         : this.instrumentApi.addFavoriteToForSaleListing(this.forSaleListing.id),
@@ -57,8 +56,6 @@ export class InfoBarComponent implements OnInit {
   }
 
   isInstrumentFavorited(forSaleListings: ForSaleListing[]): boolean {
-    return forSaleListings
-      ? forSaleListings.some((forSaleListing) => (forSaleListing.id = this.forSaleListing.id))
-      : false;
+    return forSaleListings?.some((forSaleListing) => (forSaleListing.id = this.forSaleListing.id));
   }
 }

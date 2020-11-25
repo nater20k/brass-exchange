@@ -27,7 +27,7 @@ export class ContactSellerComponent implements OnInit {
     });
   }
 
-  sendMessageToSeller() {
+  sendMessageToSeller(): void {
     if (this.contactSellerData.formGroup.get('messageContent').valid) {
       this.messageRelayService
         .sendMessageToSeller({
@@ -43,8 +43,8 @@ export class ContactSellerComponent implements OnInit {
     }
   }
 
-  clearForm() {
-    if (this.messageContent.dirty) {
+  clearForm(): void {
+    if (this.messageContent.dirty && this.messageContent.value !== '') {
       if (confirm('Are you sure you want to clear the message form?')) {
         this.contactSellerData.formGroup.reset();
       }

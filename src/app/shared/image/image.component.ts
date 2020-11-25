@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ForSaleListing } from '@nater20k/brass-exchange-instruments';
 import { Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { UploadService } from 'src/app/services/upload/upload.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class ImageComponent implements OnInit {
   imageUrls$: Observable<string[]>;
   isLoaded = false;
   imagesLoaded = false;
-  images: HTMLCollectionOf<HTMLImageElement>;
+  images: any;
 
   constructor(private storage: UploadService) {}
 
@@ -27,22 +27,22 @@ export class ImageComponent implements OnInit {
     );
   }
 
-  fetchImageUrls({ id, sellerEmail }: Partial<ForSaleListing>) {
+  fetchImageUrls({ id, sellerEmail }: Partial<ForSaleListing>): Observable<string[]> {
     return this.storage.getImageUrls(`${sellerEmail}/instruments/${id}`);
   }
 
-  toggleImagesLoaded() {
+  toggleImagesLoaded(): void {
     this.setImagesToBlock();
     this.imagesLoaded = true;
   }
 
-  private setImagesToBlock() {
+  private setImagesToBlock(): void {
     for (let i = 0; i < this.images.length; i++) {
       this.images[i].style.display = 'inline-block';
     }
   }
 
-  get isAllPageLoaded() {
+  get isAllPageLoaded(): boolean {
     return this.isLoaded && this.imagesLoaded;
   }
 }
