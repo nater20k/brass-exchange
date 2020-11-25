@@ -42,7 +42,7 @@ export class ImageComponent implements OnInit {
     }
   }
 
-  get isAllPageLoaded(): boolean {
+  get isAllPageLoaded() {
     return this.isLoaded && this.imagesLoaded;
   }
 }
