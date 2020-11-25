@@ -37,12 +37,12 @@ export class ImageComponent implements OnInit {
   }
 
   private setImagesToBlock(): void {
-    for (let i = 0; i < this.images.length; i++) {
-      this.images[i].style.display = 'inline-block';
+    for (const image of this.images) {
+      image.style.display = 'inline-block';
     }
   }
 
-  get isAllPageLoaded() {
+  get isAllPageLoaded(): boolean {
     return this.isLoaded && this.imagesLoaded;
   }
 }
