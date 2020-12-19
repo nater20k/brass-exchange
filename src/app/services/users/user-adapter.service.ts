@@ -28,8 +28,8 @@ export class UserAdapterService {
     return {
       uid: user.uid,
       displayName: user.displayName,
-      firstName: additionalUserInfo.profile.given_name as any,
-      lastName: additionalUserInfo.profile.family_name,
+      firstName: (additionalUserInfo.profile as any).given_name,
+      lastName: (additionalUserInfo.profile as any).family_name,
       email: user.email,
       dateAccountCreated: new Date(user.metadata.creationTime),
       photoUrl: user.photoURL,
