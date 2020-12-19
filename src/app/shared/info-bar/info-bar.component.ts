@@ -15,7 +15,7 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
 export class InfoBarComponent implements OnInit {
   @Input() forSaleListing: ForSaleListing;
   isFavorited = false;
-  displayContactSeller = false;
+  @Input() displayContactSeller = false;
   user: User;
   constructor(
     private auth: AuthService,
@@ -57,5 +57,9 @@ export class InfoBarComponent implements OnInit {
 
   isInstrumentFavorited(forSaleListings: ForSaleListing[]): boolean {
     return forSaleListings?.some((forSaleListing) => (forSaleListing.id = this.forSaleListing.id));
+  }
+
+  get instrumentName(): string {
+    return `${this.forSaleListing.brand} ${this.forSaleListing.model}`;
   }
 }
