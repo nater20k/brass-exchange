@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
@@ -29,6 +29,7 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
   },
+  { path: 'messages', loadChildren: () => import('./messsage/messsage.module').then((m) => m.MesssageModule) },
 ];
 
 @NgModule({
