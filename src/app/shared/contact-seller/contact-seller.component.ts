@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { Message } from '@nater20k/brass-exchange-users';
+import { of } from 'rxjs';
+import { catchError, take, tap } from 'rxjs/operators';
 import { ContactSeller } from 'src/app/services/message-relay/message-relay.adapter';
-import { MessageRelayService } from 'src/app/services/message-relay/message-relay.service';
+import { MessageApiService } from 'src/app/services/message/message-api.service';
 
 @Component({
   selector: 'app-contact-seller',
@@ -11,47 +13,81 @@ import { MessageRelayService } from 'src/app/services/message-relay/message-rela
 })
 export class ContactSellerComponent implements OnInit {
   contactSellerData: ContactSeller;
-  constructor(private messageRelayService: MessageRelayService) {}
-  @Input() sellerEmail: string;
-  @Input() inquirerEmail: string;
+  formGroup: FormGroup;
+  messageSentSuccessfully = false;
+  messageError = false;
+  CLOSE_CONTACT_FORM_TIMEOUT = 5000;
+  @Input() sellerUsername: string;
+  @Input() inquirerUsername: string;
   @Input() instrumentId: string;
+  @Input() instrumentName: string;
+  @Output() closeMessageComponent: EventEmitter<void> = new EventEmitter();
+
+  constructor(private fb: FormBuilder, private messageApi: MessageApiService) {}
 
   ngOnInit(): void {
-    this.fetchContactSellerFormGroup();
+    this.buildForm();
+    document.getElementById('body').focus();
   }
 
-  fetchContactSellerFormGroup(): void {
-    this.contactSellerData = this.messageRelayService.fetchContactSellerFormGroup({
-      messageTo: this.sellerEmail,
-      messageFrom: this.inquirerEmail,
+  buildForm(): void {
+    this.formGroup = this.fb.group({
+      seller: this.fb.control(this.sellerUsername),
+      inquirerUsername: this.fb.control(this.inquirerUsername),
+      instrumentId: this.fb.control(this.instrumentId),
+      body: this.fb.control(''),
     });
   }
 
-  sendMessageToSeller(): void {
-    if (this.contactSellerData.formGroup.get('messageContent').valid) {
-      this.messageRelayService
-        .sendMessageToSeller({
-          messageTo: this.sellerEmail,
-          messageFrom: this.inquirerEmail,
-          messageContent: this.contactSellerData.messageContent,
-          dateSent: new Date(),
-          instrumentId: this.instrumentId,
-          hasBeenRead: false,
+  sendMessage(): void {
+    this.messageApi
+      .threadManager(this.messageAdapter(this.inquirerUsername))
+      .pipe(
+        take(1),
+        tap(() => {
+          this.messageSentSuccessfully = true;
+          this.clearForm(false);
+          setTimeout(() => {
+            this.closeMessageComponent.emit();
+          }, this.CLOSE_CONTACT_FORM_TIMEOUT);
+        }),
+        catchError(() => {
+          this.messageError = true;
+          return of(null);
         })
-        .pipe(take(1))
-        .subscribe(() => this.contactSellerData.formGroup.reset());
-    }
+      )
+      .subscribe();
   }
 
-  clearForm(): void {
-    if (this.messageContent.dirty && this.messageContent.value !== '') {
-      if (confirm('Are you sure you want to clear the message form?')) {
-        this.contactSellerData.formGroup.reset();
+  clearForm(confirmation: boolean = true): void {
+    if (confirmation) {
+      if (this.messageBody.dirty && this.messageBody.value !== '') {
+        if (confirm('Are you sure you want to clear the message form?')) {
+          this.messageBody.reset();
+          document.getElementById('body').focus();
+        }
       }
+    } else {
+      this.messageBody.reset();
     }
   }
 
-  get messageContent(): AbstractControl {
-    return this.contactSellerData.formGroup.get('messageContent');
+  private messageAdapter(senderUsername: string, threadId: string = ''): Message {
+    return {
+      body: `Message in regards to ${this.instrumentName}. ${this.messageBody.value}`,
+      sendDate: new Date(),
+      sender: {
+        username: senderUsername,
+      },
+      recipient: {
+        username: this.sellerUsername,
+        hasReadMessage: false,
+      },
+      threadId,
+    };
+  }
+
+  get messageBody(): AbstractControl {
+    return this.formGroup.get('body');
   }
 }
