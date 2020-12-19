@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
-import { SubscriptionManager } from 'src/app/services/subscription-manager';
 import { UploadService } from 'src/app/services/upload/upload.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
 
@@ -21,7 +20,7 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
   templateUrl: './create-sell-instrument.component.html',
   styleUrls: ['./create-sell-instrument.component.scss'],
 })
-export class CreateSellInstrumentComponent extends SubscriptionManager implements OnInit {
+export class CreateSellInstrumentComponent implements OnInit {
   createSellFormGroup: ForSaleInstrumentListingFormGroup;
   showAddDetails = false;
   genericInstruments = BE.INSTRUMENTS.BRASS.sort();
@@ -38,9 +37,7 @@ export class CreateSellInstrumentComponent extends SubscriptionManager implement
     private auth: AuthService,
     private instrumentAdapter: InstrumentAdapterService,
     private userApi: UserApiService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.buildFormGroup();

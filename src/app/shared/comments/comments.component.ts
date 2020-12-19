@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Comment } from '@nater20k/brass-exchange-instruments';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { User } from '@nater20k/brass-exchange-users';
+import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
-import { User } from '@nater20k/brass-exchange-users';
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',

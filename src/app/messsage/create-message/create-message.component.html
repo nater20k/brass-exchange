@@ -1,0 +1,19 @@
+<div *ngIf="messageFormGroup" class="bg-gray-200 w-full mt-1 py-2">
+  <form autocomplete="off" [formGroup]="messageFormGroup" (ngSubmit)="sendMessage()">
+    <div class="p-2 flex justify-start" *ngIf="!threadId">
+      <input id="recipient" class="inline rounded-2xl border-2 px-2 py-1 w-1/2" placeholder="Recipient"
+        formControlName="recipientUsername">
+      <div *ngIf="newUsernameNeeded" class="rounded-2xl border-red-600 border-1 bg-red-500 mx-2">
+        <p class="text-gray-200 font-bold p-2">User does not exist</p>
+      </div>
+    </div>
+    <div class="flex justify-between w-full px-2">
+      <textarea autocapitalize="on" placeholder="Message"
+        class="inline rounded-2xl border-gray-400 border-2 px-2 py-1 w-full shadow-md resize-none h-10"
+        formControlName="body" id="body"></textarea>
+
+      <button class="bg-blue-500 text-gray-100 p-1 rounded-full m-1 shadow-md" type="submit"
+        [disabled]="!isBodyValid"><img class="w-6 h-auto" src="../../../assets/icons/up-arrow.svg"></button>
+    </div>
+  </form>
+</div>

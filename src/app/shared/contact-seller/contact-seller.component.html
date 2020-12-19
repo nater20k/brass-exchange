@@ -1,17 +1,21 @@
-<div class="rounded-b-md">
-  <form [formGroup]="contactSellerData.formGroup" (ngSubmit)="sendMessageToSeller()">
+<div class="rounded-b-md border-blue-300 border-t-2 mx-2">
+  <form *ngIf="!messageSentSuccessfully; else success" [formGroup]="formGroup" (ngSubmit)="sendMessage()">
     <div class="text-center">
-      <label class="block py-2" for="content">Message</label>
-      <textarea class="w-3/4 rounded-md shadow-md" formControlName="messageContent" name="content"></textarea>
+      <label class="block py-2 font-bold uppercase text-gray-800" for="body">Message</label>
+      <textarea id="body" class="w-full rounded-md shadow-md p-1" formControlName="body" name="content"></textarea>
     </div>
     <div class="flex justify-around p-4">
-      <button class="rounded-lg px-8 py-2 bg-red-500 text-white shadow-md mx-4" (click)="clearForm()">Clear</button>
-      <button
-        class="rounded-lg px-8 py-2 bg-blue-500 text-white shadow-md mx-4"
-        [disabled]="!contactSellerData.formGroup.get('messageContent').valid"
-      >
+      <button class="rounded-lg px-8 py-2 bg-red-500 text-white shadow-md mx-4" type="button"
+        (click)="clearForm()">Clear</button>
+      <button class="rounded-lg px-8 py-2 bg-blue-500 text-white shadow-md mx-4" type="submit"
+        [disabled]="!messageBody.valid">
         Send
       </button>
     </div>
   </form>
+  <ng-template #success>
+    <div class="m-2 p-2 bg-green-500 text-gray-100">
+      <p>Messsage Sent</p>
+    </div>
+  </ng-template>
 </div>

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { DocumentReference } from '@angular/fire/firestore';
-
-import { Observable, of, from } from 'rxjs';
-import { switchMap, take, catchError, tap, map } from 'rxjs/operators';
-import { UserApiService } from '../services/users/user-api.service';
 import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
+import firebase from 'firebase/app';
+import { from, Observable, of } from 'rxjs';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import { UserAdapterService } from '../services/users/user-adapter.service';
+import { UserApiService } from '../services/users/user-api.service';
 
 @Injectable({
   providedIn: 'root',

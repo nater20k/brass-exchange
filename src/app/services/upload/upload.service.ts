@@ -11,24 +11,25 @@ export class UploadService {
 
   constructor(private storage: AngularFireStorage) {}
 
-  uploadAll = ({ files, userEmail: userId, filePath = '/images/' }: Partial<UploadFiles>): AngularFireUploadTask[] => {
+  uploadAll({ files, userEmail: userId, filePath = '/images/' }: Partial<UploadFiles>): AngularFireUploadTask[] {
     const tasks: AngularFireUploadTask[] = [];
+    // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
       if (this.isQualifiedType(files[i].type)) {
         tasks.push(this.uploadSingle(files[i], userId, filePath));
       }
     }
     return tasks;
-  };
+  }
 
-  uploadSingle = (file: File, userId: string, filePath: string) => {
+  uploadSingle(file: File, userId: string, filePath: string): AngularFireUploadTask {
     let ref: AngularFireStorageReference;
     const randomId = Math.random().toString(36).substring(2);
     ref = this.storage.ref(`${userId}${filePath}/${randomId}`);
     return ref.put(file);
-  };
+  }
 
-  getImageUrls = (location: string): Observable<string[]> => {
+  getImageUrls(location: string): Observable<string[]> {
     const urls: string[] = [];
     return this.storage
       .ref(location)
@@ -44,11 +45,11 @@ export class UploadService {
           return urls;
         })
       );
-  };
+  }
 
-  private isQualifiedType = (type: string) => {
+  private isQualifiedType(type: string): boolean {
     return type === 'image/jpeg' || type === 'image/png';
-  };
+  }
 }
 
 export interface UploadFiles {
