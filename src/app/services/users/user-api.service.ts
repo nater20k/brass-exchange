@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
-import { Observable, from, of } from 'rxjs';
-import { map, switchMap, take, catchError, tap, first } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -36,10 +36,29 @@ export class UserApiService {
     return this.afs
       .collection<User>('users', (ref) => ref.where('email', '==', email))
       .valueChanges()
+      .pipe(map((users) => users[0]));
+  }
+
+  getUserByUsername(username: string): Observable<User> {
+    return this.afs
+      .collection<User>('users', (ref) => ref.where('displayName', '==', username))
+      .valueChanges()
       .pipe(
-        tap(console.log),
+        take(1),
         map((users) => users[0]),
-        tap(console.log)
+        catchError((err) => {
+          return of(null);
+        })
+      );
+  }
+
+  doesUserExist(username: string): Observable<boolean> {
+    return this.afs
+      .collection<User>('users', (ref) => ref.where('displayName', '==', username))
+      .valueChanges()
+      .pipe(
+        take(1),
+        map((users) => users.length > 0)
       );
   }
 

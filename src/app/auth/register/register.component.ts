@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { BE } from '@nater20k/brass-exchange-constants';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
-import { tap } from 'rxjs/operators';
 import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 

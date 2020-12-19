@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Message } from '@nater20k/brass-exchange-users';
 import { of } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
-import { ContactSeller } from 'src/app/services/message-relay/message-relay.adapter';
 import { MessageApiService } from 'src/app/services/message/message-api.service';
 
 @Component({
@@ -12,7 +11,6 @@ import { MessageApiService } from 'src/app/services/message/message-api.service'
   styleUrls: ['./contact-seller.component.scss'],
 })
 export class ContactSellerComponent implements OnInit {
-  contactSellerData: ContactSeller;
   formGroup: FormGroup;
   messageSentSuccessfully = false;
   messageError = false;
