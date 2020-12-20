@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
-import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +19,7 @@ export class NavbarComponent {
       .pipe(take(1))
       .subscribe(() => {
         this.isMenuOpen = false;
-        this.navService.navigateTo(LOCATIONS.LOGIN);
+        this.navService.navigateTo(locations.login);
       });
   }
 

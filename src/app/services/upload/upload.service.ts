@@ -13,19 +13,18 @@ export class UploadService {
 
   uploadAll({ files, userEmail: userId, filePath = '/images/' }: Partial<UploadFiles>): AngularFireUploadTask[] {
     const tasks: AngularFireUploadTask[] = [];
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      if (this.isQualifiedType(files[i].type)) {
-        tasks.push(this.uploadSingle(files[i], userId, filePath));
+
+    for (const file of files) {
+      if (this.isQualifiedType(file.type)) {
+        tasks.push(this.uploadSingle(file, userId, filePath));
       }
     }
     return tasks;
   }
 
   uploadSingle(file: File, userId: string, filePath: string): AngularFireUploadTask {
-    let ref: AngularFireStorageReference;
     const randomId = Math.random().toString(36).substring(2);
-    ref = this.storage.ref(`${userId}${filePath}/${randomId}`);
+    const ref: AngularFireStorageReference = this.storage.ref(`${userId}${filePath}/${randomId}`);
     return ref.put(file);
   }
 

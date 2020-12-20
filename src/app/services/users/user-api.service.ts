@@ -3,14 +3,15 @@ import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserApiService {
-  constructor(private afs: AngularFirestore) {}
   afsPath = this.afs.collection<User>('users');
+
+  constructor(private afs: AngularFirestore) {}
 
   // Create
   createUser(user: User): Observable<DocumentReference | void> {
@@ -46,9 +47,7 @@ export class UserApiService {
       .pipe(
         take(1),
         map((users) => users[0]),
-        catchError((err) => {
-          return of(null);
-        })
+        catchError((err) => of(null))
       );
   }
 
@@ -106,12 +105,12 @@ export class UserApiService {
 
   addFavoritedInstrumentToUser(userId: string, instrument: ForSaleListing): Observable<void> {
     return this.getSingleUser(userId).pipe(
-      switchMap((user) => {
+      tap((user) =>
         user?.favoritedInstruments
           ? user.favoritedInstruments.push(instrument)
-          : (user.favoritedInstruments = [instrument]);
-        return this.updateUser(user);
-      })
+          : (user.favoritedInstruments = [instrument])
+      ),
+      switchMap((user) => this.updateUser(user))
     );
   }
 

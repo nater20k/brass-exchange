@@ -14,9 +14,9 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
   styleUrls: ['./create-message.component.scss'],
 })
 export class CreateMessageComponent implements OnInit {
-  messageFormGroup: FormGroup;
   @Input() threadId: string;
   @Input() inputRecipientUsername: string;
+  messageFormGroup: FormGroup;
   userDoesNotExist = false;
 
   constructor(
@@ -35,8 +35,8 @@ export class CreateMessageComponent implements OnInit {
     this.auth.user$
       .pipe(
         take(1),
-        switchMap((user) => {
-          return this.inputRecipientUsername
+        switchMap((user) =>
+          this.inputRecipientUsername
             ? this.messageApi.threadManager(this.messageFromForm(user.displayName, this.threadId))
             : this.userApi.doesUserExist(this.recipientUsername).pipe(
                 switchMap((exists) => {
@@ -47,8 +47,8 @@ export class CreateMessageComponent implements OnInit {
                     return of(null);
                   }
                 })
-              );
-        })
+              )
+        )
       )
       .subscribe((threadId) => {
         if (!window.location.href.split('/')[5] && threadId) {

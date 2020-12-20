@@ -12,13 +12,13 @@ export class NavigationService {
   }
 }
 
-export const LOCATIONS = {
-  INSTRUMENTS: {
-    HOME: 'instruments',
-    BUY: 'instruments/for-sale',
-    SELL: 'instruments/sell',
-    DETAIL: (id: string) => `instruments/detail/${id}`,
+export const locations = {
+  instruments: {
+    home: 'instruments',
+    buy: 'instruments/for-sale',
+    sell: 'instruments/sell',
+    detail: (id: string) => `instruments/detail/${id}`,
   },
   services: 'services',
-  LOGIN: 'login',
+  login: 'login',
 };

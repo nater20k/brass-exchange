@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Message, Thread, ThreadMetaData, User } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 import { forkJoin, from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserApiService } from '../users/user-api.service';
 
@@ -18,8 +18,8 @@ export class MessageApiService {
       return this.addMessageToThread(message).pipe(map(() => message.threadId));
     } else {
       return this.fetchThreadIdByRecipient(message).pipe(
-        switchMap((threadId) => {
-          return threadId
+        switchMap((threadId) =>
+          threadId
             ? this.addMessageToThread({ ...message, threadId })
             : this.createThread(message.sender.username, message.recipient.username).pipe(
                 switchMap((id) =>
@@ -32,8 +32,8 @@ export class MessageApiService {
                     )
                   )
                 )
-              );
-        })
+              )
+        )
       );
     }
   }
@@ -75,18 +75,14 @@ export class MessageApiService {
   }
 
   addThreadIdToUser(messageId: string, username: string, recipient: string): Observable<string> {
+    const metaData: ThreadMetaData = {
+      id: messageId,
+      recipient,
+    };
     return this.userApi.getUserByUsername(username).pipe(
       take(1),
-      switchMap((user) => {
-        const metaData: ThreadMetaData = {
-          id: messageId,
-          recipient,
-        };
-        user.threads?.length > 0
-          ? user.threads.push(metaData) // TODO: put typing in library
-          : (user.threads = [metaData]); // TODO: put typing in library
-        return this.userApi.updateUser(user);
-      }),
+      tap((user) => (user.threads?.length > 0 ? user.threads.push(metaData) : (user.threads = [metaData]))),
+      switchMap((user) => this.userApi.updateUser(user)),
       map(() => username)
     );
   }
@@ -97,11 +93,9 @@ export class MessageApiService {
       .collection<Thread>('threads')
       .valueChanges({ idField: 'id' })
       .pipe(
-        map((unmappedThreads) => {
-          return unmappedThreads.filter((allThreads) =>
-            user.threads.find((userThreads) => allThreads.id === userThreads.id)
-          );
-        })
+        map((unmappedThreads) =>
+          unmappedThreads.filter((allThreads) => user.threads.find((userThreads) => allThreads.id === userThreads.id))
+        )
       );
   }
 

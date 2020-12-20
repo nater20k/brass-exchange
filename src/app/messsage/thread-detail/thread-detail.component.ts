@@ -12,11 +12,11 @@ import { MessageApiService } from 'src/app/services/message/message-api.service'
   styleUrls: ['./thread-detail.component.scss'],
 })
 export class ThreadDetailComponent implements OnInit, AfterViewInit {
+  @ViewChild('scroll', { static: true }) chatWindonw: ElementRef;
   thread$: Observable<Thread>;
   threadId: any;
   senderUsername: string;
   recipientUsername: string;
-  @ViewChild('scroll', { static: true }) chatWindonw: ElementRef;
 
   constructor(private messageApi: MessageApiService, private router: ActivatedRoute, private auth: AuthService) {}
 
@@ -38,9 +38,7 @@ export class ThreadDetailComponent implements OnInit, AfterViewInit {
               this.threadId = res[1]?.path;
               return res[1]?.path;
             }),
-            switchMap((threadId) => {
-              return this.messageApi.getThreadById(threadId);
-            }),
+            switchMap((threadId) => this.messageApi.getThreadById(threadId)),
             tap((thread) => {
               if (thread.owners[0] !== this.senderUsername) {
                 this.recipientUsername = thread.owners[0];

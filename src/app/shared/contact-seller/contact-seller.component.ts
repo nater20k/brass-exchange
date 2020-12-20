@@ -11,15 +11,16 @@ import { MessageApiService } from 'src/app/services/message/message-api.service'
   styleUrls: ['./contact-seller.component.scss'],
 })
 export class ContactSellerComponent implements OnInit {
-  formGroup: FormGroup;
-  messageSentSuccessfully = false;
-  messageError = false;
-  CLOSE_CONTACT_FORM_TIMEOUT = 5000;
   @Input() sellerUsername: string;
   @Input() inquirerUsername: string;
   @Input() instrumentId: string;
   @Input() instrumentName: string;
   @Output() closeMessageComponent: EventEmitter<void> = new EventEmitter();
+
+  formGroup: FormGroup;
+  messageSentSuccessfully = false;
+  messageError = false;
+  closeContactTimeout = 5000;
 
   constructor(private fb: FormBuilder, private messageApi: MessageApiService) {}
 
@@ -47,7 +48,7 @@ export class ContactSellerComponent implements OnInit {
           this.clearForm(false);
           setTimeout(() => {
             this.closeMessageComponent.emit();
-          }, this.CLOSE_CONTACT_FORM_TIMEOUT);
+          }, this.closeContactTimeout);
         }),
         catchError(() => {
           this.messageError = true;

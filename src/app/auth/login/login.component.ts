@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
 import { take } from 'rxjs/operators';
-import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
         this.loginFormGroup = this.formService.emailAndPasswordLoginForm();
         this.loggedOut = true;
       } else {
-        this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
+        this.navService.navigateTo(locations.instruments.home);
       }
     });
   }
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
       .emailSignIn(userLogin)
       .pipe(take(1))
       .subscribe(
-        () => this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME),
+        () => this.navService.navigateTo(locations.instruments.home),
         () => {
           this.loginError = true;
           this.loginFormGroup.reset();
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
       .googleSignIn()
       .pipe(take(1))
       .subscribe(() => {
-        this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
+        this.navService.navigateTo(locations.instruments.home);
       });
   }
 

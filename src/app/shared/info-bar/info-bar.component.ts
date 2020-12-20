@@ -14,9 +14,10 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
 })
 export class InfoBarComponent implements OnInit {
   @Input() forSaleListing: ForSaleListing;
-  isFavorited = false;
   @Input() displayContactSeller = false;
+  isFavorited = false;
   user: User;
+
   constructor(
     private auth: AuthService,
     private userApi: UserApiService,
