@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
-import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-for-sale',
@@ -8,10 +8,11 @@ import { LOCATIONS, NavigationService } from 'src/app/services/navigation/naviga
   styleUrls: ['./for-sale.component.scss'],
 })
 export class ForSaleComponent {
-  constructor(private instrumentApi: InstrumentApiService, private navService: NavigationService) {}
   instrumentsForSale = this.instrumentApi.getAllForSaleInstruments();
 
+  constructor(private instrumentApi: InstrumentApiService, private navService: NavigationService) {}
+
   navigateToDetail(id: string): void {
-    this.navService.navigateTo(LOCATIONS.INSTRUMENTS.DETAIL(id));
+    this.navService.navigateTo(locations.instruments.detail(id));
   }
 }

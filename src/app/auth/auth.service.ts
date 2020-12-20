@@ -59,15 +59,15 @@ export class AuthService {
     );
   }
 
-  private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
-    return this.userApiService.getSingleUser(user.user.uid).pipe(
+  signOut(): Observable<void> {
+    return from(this.afAuth.signOut()).pipe(
       take(1),
       catchError(() => of(null))
     );
   }
 
-  signOut(): Observable<void> {
-    return from(this.afAuth.signOut()).pipe(
+  private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
+    return this.userApiService.getSingleUser(user.user.uid).pipe(
       take(1),
       catchError(() => of(null))
     );

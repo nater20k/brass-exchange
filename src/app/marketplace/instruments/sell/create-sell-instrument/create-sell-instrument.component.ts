@@ -30,6 +30,7 @@ export class CreateSellInstrumentComponent implements OnInit {
   uploadProgress: Observable<number>;
   images: FileList;
   keys = ['B♭', 'C', 'D', 'E♭', 'F', 'G', 'A']; // Move to common
+
   constructor(
     private formBuilderService: FormBuilderService,
     private instrumentApi: InstrumentApiService,
@@ -70,16 +71,12 @@ export class CreateSellInstrumentComponent implements OnInit {
     this.auth.user$
       .pipe(
         take(1),
-        switchMap((user) => {
-          return this.instrumentApi.createForSaleInstrument(instrument).pipe(
-            switchMap((forSale) => {
-              return this.uploadPhoto(forSale.id).pipe(map(() => forSale.id));
-            }),
-            switchMap((id) => {
-              return this.userApi.addToPersonalInstrumentsListed(user.uid, { ...instrument, id });
-            })
-          );
-        })
+        switchMap((user) =>
+          this.instrumentApi.createForSaleInstrument(instrument).pipe(
+            switchMap((forSale) => this.uploadPhoto(forSale.id).pipe(map(() => forSale.id))),
+            switchMap((id) => this.userApi.addToPersonalInstrumentsListed(user.uid, { ...instrument, id }))
+          )
+        )
       )
       .subscribe();
   }
