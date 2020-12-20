@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
+import firebase from 'firebase/app';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -104,24 +105,38 @@ export class UserApiService {
   // FAVORITES SECTION
 
   addFavoritedInstrumentToUser(userId: string, instrument: ForSaleListing): Observable<void> {
-    return this.getSingleUser(userId).pipe(
-      tap((user) =>
-        user?.favoritedInstruments
-          ? user.favoritedInstruments.push(instrument)
-          : (user.favoritedInstruments = [instrument])
-      ),
-      switchMap((user) => this.updateUser(user))
+    return from(
+      this.afs
+        .collection('users')
+        .doc(userId)
+        .update({
+          favoritedInstruments: firebase.firestore.FieldValue.arrayUnion(instrument),
+        })
     );
   }
 
   removeFavoritedInstrumentFromUser(userId: string, forSaleListing: ForSaleListing): Observable<void> {
+    // return this.getSingleUser(userId).pipe(
+    //   switchMap((user) => {
+    //     const remainingFavorites = user.favoritedInstruments.filter(
+    //       (instrument) => instrument.id !== forSaleListing.id
+    //     );
+    //     return this.updateUser({
+    //       ...user,
+    //       favoritedInstruments: firebase.firestore.FieldValue.arrayRemove(forSaleListing) as any,
+    //     });
+    //   })
+    // );
+
     return this.getSingleUser(userId).pipe(
-      switchMap((user) => {
-        const remainingFavorites = user.favoritedInstruments.filter(
-          (instrument) => instrument.id !== forSaleListing.id
-        );
-        return this.updateUser({ ...user, favoritedInstruments: remainingFavorites });
-      })
+      map(
+        (user) =>
+          (user = {
+            ...user,
+            favoritedInstruments: user.favoritedInstruments.filter((instrument) => instrument.id !== forSaleListing.id),
+          })
+      ),
+      switchMap((user) => this.updateUser(user))
     );
   }
 }

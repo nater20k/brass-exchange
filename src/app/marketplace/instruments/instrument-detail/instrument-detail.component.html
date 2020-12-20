@@ -6,6 +6,7 @@
   </div>
   <div class="border-2 shadow-md divide-solid rounded mb-4">
     <app-image [sellerEmail]="instrument.sellerEmail" [instrumentId]="instrument.id"></app-image>
+    <app-info-bar [forSaleListing]="instrument"></app-info-bar>
     <div>
       <div class="content flex justify-between p-4">
         <ul class="left">
@@ -21,9 +22,8 @@
           <li *ngIf="instrument.views"><span class="bold">Views:</span> {{ instrument.views }}</li>
         </ul>
       </div>
-      <app-info-bar [forSaleListing]="instrument"></app-info-bar>
+      <p *ngIf="instrument.description" class="p-4 text-sm">{{ instrument.description }}</p>
     </div>
-    <p *ngIf="instrument.description" class="p-4 text-sm">{{ instrument.description }}</p>
   </div>
   <app-comments [comments]="instrument.comments" (newComment)="addComment($event)"></app-comments>
 </div>

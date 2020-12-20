@@ -38,14 +38,14 @@ export class InfoBarComponent implements OnInit {
   augmentFavorite(): void {
     const localIsFavorited = this.isFavorited;
     this.isFavorited = !this.isFavorited;
-    forkJoin({
-      augmentedFavoriteCount: localIsFavorited
-        ? this.instrumentApi.removeFavoriteToForSaleListing(this.forSaleListing.id)
+    forkJoin([
+      localIsFavorited
+        ? this.instrumentApi.removeFavoriteFromForSaleListing(this.forSaleListing.id)
         : this.instrumentApi.addFavoriteToForSaleListing(this.forSaleListing.id),
-      augmentedFavoriteInstrumentList: localIsFavorited
+      localIsFavorited
         ? this.userApi.removeFavoritedInstrumentFromUser(this.user.uid, this.forSaleListing)
         : this.userApi.addFavoritedInstrumentToUser(this.user.uid, this.forSaleListing),
-    })
+    ])
       .pipe(
         take(1),
         catchError(() => {
@@ -57,7 +57,7 @@ export class InfoBarComponent implements OnInit {
   }
 
   isInstrumentFavorited(forSaleListings: ForSaleListing[]): boolean {
-    return forSaleListings?.some((forSaleListing) => (forSaleListing.id = this.forSaleListing.id));
+    return forSaleListings?.some((forSaleListing) => forSaleListing.id === this.forSaleListing.id);
   }
 
   get instrumentName(): string {
