@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Message } from '@nater20k/brass-exchange-users';
 import { of } from 'rxjs';
@@ -10,7 +10,7 @@ import { MessageApiService } from 'src/app/services/message/message-api.service'
   templateUrl: './contact-seller.component.html',
   styleUrls: ['./contact-seller.component.scss'],
 })
-export class ContactSellerComponent implements OnInit {
+export class ContactSellerComponent implements OnInit, AfterViewInit {
   @Input() sellerUsername: string;
   @Input() inquirerUsername: string;
   @Input() instrumentId: string;
@@ -26,6 +26,9 @@ export class ContactSellerComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+  }
+
+  ngAfterViewInit(): void {
     document.getElementById('body').focus();
   }
 
