@@ -1,4 +1,4 @@
-<div class="rounded-b-md border-blue-300 border-t-2 mx-2">
+<div class="rounded-b-md mx-2">
   <form *ngIf="!messageSentSuccessfully; else success" [formGroup]="formGroup" (ngSubmit)="sendMessage()">
     <div class="text-center">
       <label class="block py-2 font-bold uppercase text-gray-800" for="body">Message</label>
