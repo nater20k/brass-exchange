@@ -118,7 +118,7 @@ export class InstrumentApiService {
     );
   }
 
-  removeFavoriteToForSaleListing(instrumentId: string): Observable<void> {
+  removeFavoriteFromForSaleListing(instrumentId: string): Observable<void> {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
       tap((instrument) => (instrument?.favorites ? (instrument.favorites -= 1) : (instrument.favorites = 0))),
