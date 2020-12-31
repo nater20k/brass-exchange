@@ -11,7 +11,11 @@ export class UploadService {
 
   constructor(private storage: AngularFireStorage) {}
 
-  uploadAll({ files, userEmail: userId, filePath = '/images/' }: Partial<UploadFiles>): AngularFireUploadTask[] {
+  uploadAll({
+    files,
+    instrumentOwnerId: userId,
+    filePath = '/images/',
+  }: Partial<UploadFiles>): AngularFireUploadTask[] {
     const tasks: AngularFireUploadTask[] = [];
 
     for (const file of files) {
@@ -53,7 +57,7 @@ export class UploadService {
 
 export interface UploadFiles {
   files: FileList;
-  userEmail: string;
+  instrumentOwnerId: string;
   instrumentId: string;
   filePath: string;
 }

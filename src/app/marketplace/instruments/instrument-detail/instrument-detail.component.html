@@ -5,7 +5,7 @@
     </h3>
   </div>
   <div class="border-2 shadow-md divide-solid rounded mb-4">
-    <app-image [sellerEmail]="instrument.sellerEmail" [instrumentId]="instrument.id"></app-image>
+    <app-image [ownerId]="instrument.ownerId" [instrumentId]="instrument.id"></app-image>
     <app-info-bar [forSaleListing]="instrument"></app-info-bar>
     <div>
       <div class="content flex justify-between p-4">
@@ -13,6 +13,8 @@
           <li><span class="bold"></span> {{ instrument.type | titlecase }}</li>
           <li *ngIf="instrument.key"><span class="bold">Key:</span> {{ instrument.key }}</li>
           <li *ngIf="instrument.size"><span class="bold">Size:</span> {{ instrument.size }}</li>
+          <li *ngIf="instrument.isCaseIncluded"><span class="bold">Case:</span> {{ instrument.isCaseIncluded ? 'Yes' :
+            'No' }}</li>
           <li><span class="bold">Shipping:</span> {{ instrument.isShippingAvailable ? 'Yes' : 'No' }}</li>
         </ul>
         <ul class="right">

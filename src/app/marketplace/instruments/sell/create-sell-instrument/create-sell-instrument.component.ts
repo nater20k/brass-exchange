@@ -45,16 +45,25 @@ export class CreateSellInstrumentComponent implements OnInit {
   }
 
   buildFormGroup(): void {
-    this.createSellFormGroup = new ForSaleInstrumentListingFormGroup(
-      this.formBuilderService.createInstrumentForSaleFormGroup()
-    );
-    this.addUserEmailToForm().subscribe();
+    this.auth.user$
+      .pipe(
+        map(
+          (user) =>
+            new ForSaleInstrumentListingFormGroup(this.formBuilderService.createInstrumentForSaleFormGroup(), user.uid)
+        ),
+        tap((formGroup) => (this.createSellFormGroup = formGroup))
+      )
+      .subscribe();
   }
 
   uploadPhoto(instrumentId: string): Observable<User> {
     return this.auth.user$.pipe(take(1)).pipe(
       tap((user) => {
-        this.storage.uploadAll({ files: this.images, userEmail: user.email, filePath: `/instruments/${instrumentId}` });
+        this.storage.uploadAll({
+          files: this.images,
+          instrumentOwnerId: user.uid,
+          filePath: `/instruments/${instrumentId}`,
+        });
       })
     );
   }
@@ -67,30 +76,20 @@ export class CreateSellInstrumentComponent implements OnInit {
     const instrument = this.instrumentAdapter.mapInstrumentForSaleFromInstrumentForSaleFormGroup(
       this.createSellFormGroup
     );
-
-    this.auth.user$
+    this.instrumentApi
+      .createForSaleInstrument(instrument)
       .pipe(
         take(1),
-        switchMap((user) =>
-          this.instrumentApi.createForSaleInstrument(instrument).pipe(
-            switchMap((forSale) => this.uploadPhoto(forSale.id).pipe(map(() => forSale.id))),
-            switchMap((id) => this.userApi.addToPersonalInstrumentsListed(user.uid, { ...instrument, id }))
-          )
-        )
+        switchMap((forSale) => this.uploadPhoto(forSale.id).pipe(map(() => forSale.id))),
+        switchMap((id) => this.userApi.addToPersonalInstrumentsListed(instrument.ownerId, { ...instrument, id }))
       )
-      .subscribe();
-  }
 
-  addUserEmailToForm(): Observable<User> {
-    return this.auth.user$.pipe(
-      take(1),
-      tap((user) => this.createSellFormGroup.formGroup.patchValue({ sellerEmail: user.email }))
-    );
+      .subscribe();
   }
 
   clearForm(): void {
     if (confirm('Are you sure you want to clear the form?')) {
-      this.createSellFormGroup.formGroup.reset();
+      this.buildFormGroup();
     }
   }
 
