@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Finish, ForSaleListing, TubaSize } from '@nater20k/brass-exchange-instruments';
 
 @Component({
@@ -73,7 +73,7 @@ export class ForSaleListingComponent {
     return this.instrument.views;
   }
 
-  get sellerEmail(): string {
-    return this.instrument.sellerEmail;
+  get ownerId(): string {
+    return this.instrument.ownerId;
   }
 }

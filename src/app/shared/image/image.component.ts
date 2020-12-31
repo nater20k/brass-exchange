@@ -10,7 +10,7 @@ import { UploadService } from 'src/app/services/upload/upload.service';
   styleUrls: ['./image.component.scss'],
 })
 export class ImageComponent implements OnInit {
-  @Input() sellerEmail: string;
+  @Input() ownerId: string;
   @Input() instrumentId: string;
   @Input() isHeroImage = false;
   imageUrls$: Observable<string[]>;
@@ -22,13 +22,13 @@ export class ImageComponent implements OnInit {
 
   ngOnInit(): void {
     this.images = document.getElementsByTagName<'img'>('img');
-    this.imageUrls$ = this.fetchImageUrls({ id: this.instrumentId, sellerEmail: this.sellerEmail }).pipe(
+    this.imageUrls$ = this.fetchImageUrls({ id: this.instrumentId, ownerId: this.ownerId }).pipe(
       finalize(() => (this.isLoaded = true))
     );
   }
 
-  fetchImageUrls({ id, sellerEmail }: Partial<ForSaleListing>): Observable<string[]> {
-    return this.storage.getImageUrls(`${sellerEmail}/instruments/${id}`);
+  fetchImageUrls({ id, ownerId }: Partial<ForSaleListing>): Observable<string[]> {
+    return this.storage.getImageUrls(`${ownerId}/instruments/${id}`);
   }
 
   toggleImagesLoaded(): void {
