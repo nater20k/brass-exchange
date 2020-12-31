@@ -32,12 +32,11 @@ export class AuthService {
 
   googleSignIn(): Observable<User> {
     const provider = new firebase.auth.GoogleAuthProvider();
-
     return from(this.afAuth.signInWithPopup(provider)).pipe(
-      switchMap((user) => from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))),
-      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)),
-      take(1),
-      catchError(() => of(null))
+      switchMap((user: firebase.auth.UserCredential) =>
+        from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))
+      ),
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION))
     );
   }
 
@@ -77,8 +76,15 @@ export class AuthService {
     user: firebase.auth.UserCredential,
     userFormGroup?: UserFormGroup
   ): Observable<void | DocumentReference> {
-    return this.userApiService
-      .createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup))
-      .pipe(catchError(() => of(null)));
+    if (user.additionalUserInfo.isNewUser) {
+      const displayName = this.displayNamePrompt();
+      return this.userApiService.createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup, displayName));
+    } else {
+      return this.userApiService.updateUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
+    }
+  }
+
+  private displayNamePrompt() {
+    return prompt('What would you like your username to be?'); // TODO implement with real modal
   }
 }
