@@ -85,6 +85,6 @@ export class AuthService {
   }
 
   private displayNamePrompt() {
-    return prompt('What would you like your username to be?');
+    return prompt('What would you like your username to be?'); // TODO implement with real modal
   }
 }
