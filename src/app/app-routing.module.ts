@@ -18,10 +18,12 @@ const routes: Routes = [
   {
     path: 'instruments',
     loadChildren: () => import('./marketplace/instruments/instruments.module').then((m) => m.InstrumentsModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'services',
     loadChildren: () => import('./marketplace/services/services.module').then((m) => m.ServicesModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'contact-us',
@@ -30,8 +32,13 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard],
   },
-  { path: 'messages', loadChildren: () => import('./messsage/messsage.module').then((m) => m.MesssageModule) },
+  {
+    path: 'messages',
+    loadChildren: () => import('./messsage/messsage.module').then((m) => m.MesssageModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
