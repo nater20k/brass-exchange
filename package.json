@@ -12,7 +12,6 @@
     "serve": "ng serve --host 0.0.0.0",
     "deploy-dev": "ng build && firebase use default && firebase deploy --only hosting",
     "deploy-prod": "npm run build-prod && firebase use prod && firebase deploy --only hosting"
-
   },
   "private": true,
   "dependencies": {

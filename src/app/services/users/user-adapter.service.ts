@@ -6,13 +6,13 @@ import firebase from 'firebase/app';
   providedIn: 'root',
 })
 export class UserAdapterService {
-  mapUserFromRegister(user: firebase.auth.UserCredential, userFormGroup?: UserFormGroup): User {
+  mapUserFromRegister(user: firebase.auth.UserCredential, userFormGroup?: UserFormGroup, displayName?: string): User {
     return userFormGroup
       ? {
           ...this.mapFormGroupUser(userFormGroup),
           ...this.mapPartialFirebaseUser(user),
         }
-      : this.mapFullFirebaseUser(user);
+      : this.mapFullFirebaseUser(user, displayName);
   }
 
   private mapPartialFirebaseUser({ user }: firebase.auth.UserCredential): any {
@@ -24,10 +24,9 @@ export class UserAdapterService {
     };
   }
 
-  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential): any {
-    return {
+  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential, displayName?: string): any {
+    const mappedUser: any = {
       uid: user.uid,
-      displayName: user.displayName,
       firstName: (additionalUserInfo.profile as any).given_name,
       lastName: (additionalUserInfo.profile as any).family_name,
       email: user.email,
@@ -37,6 +36,10 @@ export class UserAdapterService {
       instrumentsListed: [],
       rating: 0,
     };
+    if (displayName) {
+      mappedUser.displayName = displayName;
+    }
+    return mappedUser;
   }
 
   private mapFormGroupUser({ firstName, lastName, principalInstrument, displayName }: UserFormGroup): any {
