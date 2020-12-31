@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
 import { AuthService } from './auth/auth.service';
-import { locations, NavigationService } from './services/navigation/navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +8,7 @@ import { locations, NavigationService } from './services/navigation/navigation.s
 })
 export class AppComponent implements OnInit {
   title = 'brass-exchange';
-  constructor(public auth: AuthService, private navService: NavigationService) {}
+  constructor(public auth: AuthService) {}
 
-  ngOnInit(): void {
-    this.auth.user$.pipe(take(1)).subscribe((user) => {
-      if (!user) {
-        this.navService.navigateTo(locations.login);
-      }
-    });
-  }
+  ngOnInit(): void {}
 }
