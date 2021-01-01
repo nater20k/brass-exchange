@@ -4,6 +4,6 @@
 <div *ngFor="let thread of threads | async" (click)="navigateToDetail(thread.id)"
   class=" m-2 p-4 text-left bg-blue-500 text-white rounded-md border-gray-100 border-b-2 text-xl font-bold">
 
-  {{thread.owners[0] | titlecase}}
+  {{thread.owners[0].username | titlecase}}
 
 </div>

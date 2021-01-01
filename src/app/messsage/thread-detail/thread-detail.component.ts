@@ -40,10 +40,10 @@ export class ThreadDetailComponent implements OnInit, AfterViewInit {
             }),
             switchMap((threadId) => this.messageApi.getThreadById(threadId)),
             tap((thread) => {
-              if (thread.owners[0] !== this.senderUsername) {
-                this.recipientUsername = thread.owners[0];
+              if (thread.owners[0].username !== this.senderUsername) {
+                this.recipientUsername = thread.owners[0].username;
               } else {
-                this.recipientUsername = thread.owners[1];
+                this.recipientUsername = thread.owners[1].username;
               }
             }),
             tap(() => {
