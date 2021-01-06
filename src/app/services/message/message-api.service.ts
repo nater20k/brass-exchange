@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Message, Thread, ThreadMetaData, User } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
-import { forkJoin, from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { forkJoin, from, Observable, zip } from 'rxjs';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserApiService } from '../users/user-api.service';
 
@@ -43,24 +43,23 @@ export class MessageApiService {
     return from(
       ref.update({
         messages: firebase.firestore.FieldValue.arrayUnion(message),
+        lastResponse: firebase.firestore.Timestamp.now(),
       })
+    ).pipe(map(() => message.threadId));
+  }
+
+  createThread(senderUsername: string, recipientUsername: string): Observable<string> {
+    const docId = this.afs.createId();
+    return zip(
+      this.auth.user$.pipe(map((user) => ({ id: user.uid, username: user.displayName }))),
+      this.userApi
+        .getUserByUsername(recipientUsername)
+        .pipe(map((user) => ({ id: user.uid, username: user.displayName })))
     ).pipe(
-      map(() => message.threadId),
-      catchError((err) => of(err))
+      switchMap((threadOwners) => this.afs.collection('threads').doc(docId).set({ owners: threadOwners })),
+      map(() => docId)
     );
   }
-
-  createThread(sender: string, recipient: string): Observable<string> {
-    const id = this.afs.createId();
-    return from(
-      this.afs
-        .collection('threads')
-        .doc(id)
-        .set({ owners: [sender, recipient] })
-    ).pipe(map(() => id));
-  }
-
-  // doesUserAlreadyHaveThread(recipient: string): Observable<string> {}
 
   getMessagesFromThread(threadId: string): Observable<Message[]> {
     return this.afs
@@ -88,47 +87,33 @@ export class MessageApiService {
   }
 
   getThreads(user: User): Observable<Partial<Thread[]>> {
-    const threads: Thread[] = [];
     return this.afs
-      .collection<Thread>('threads')
+      .collection<Thread>('threads', (ref) =>
+        ref.where('owners', 'array-contains', { id: user.uid, username: user.displayName })
+      )
       .valueChanges({ idField: 'id' })
-      .pipe(
-        map((unmappedThreads) =>
-          unmappedThreads.filter((allThreads) => user.threads.find((userThreads) => allThreads.id === userThreads.id))
-        )
-      );
+      .pipe(map((filterdThreads) => filterdThreads.sort(this.sortByResponseTime)));
   }
 
   fetchThreadIdByRecipient(message: Message): Observable<string> {
     return this.auth.user$.pipe(
       map((user) => user?.threads.find((thread) => thread.recipient === message.recipient.username)),
-      map((metaData) => metaData.id),
-      catchError(() => of(null))
+      map((metaData) => metaData?.id)
     );
+  }
+
+  private sortByResponseTime(a: Thread, b: Thread): -1 | 0 | 1 {
+    if (a.lastResponse > b.lastResponse) {
+      return -1;
+    } else if (a.lastResponse < b.lastResponse) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
 
-// export interface Thread {
-//   id?: string;
-//   messages?: Message[];
-//   owners: string[];
-// }
-
-// export interface Message {
-//   body: string;
-//   sendDate: Date;
-//   sender: {
-//     username: string;
-//   };
-//   recipient: {
-//     username: string;
-//     hasReadMessage: boolean;
-//   };
-//   threadId?: string;
-// }
-
-// export interface ThreadMetaData {
-//   id: string;
-//   recipient: string;
-//   messageCount?: number;
-// }
+export interface ThreadOwner {
+  id: string;
+  username: string;
+}

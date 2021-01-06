@@ -52,7 +52,7 @@ export class UserApiService {
       );
   }
 
-  doesUserExist(username: string): Observable<boolean> {
+  fetchUserMetaDataIfExists(username: string): Observable<boolean> {
     return this.afs
       .collection<User>('users', (ref) => ref.where('displayName', '==', username))
       .valueChanges()

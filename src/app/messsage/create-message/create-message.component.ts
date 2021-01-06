@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from '@nater20k/brass-exchange-users';
+import firebase from 'firebase';
 import { of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -38,9 +39,9 @@ export class CreateMessageComponent implements OnInit {
         switchMap((user) =>
           this.inputRecipientUsername
             ? this.messageApi.threadManager(this.messageFromForm(user.displayName, this.threadId))
-            : this.userApi.doesUserExist(this.recipientUsername).pipe(
-                switchMap((exists) => {
-                  if (exists) {
+            : this.userApi.getUserByUsername(this.recipientUsername).pipe(
+                switchMap((recipient) => {
+                  if (recipient) {
                     return this.messageApi.threadManager(this.messageFromForm(user.displayName, this.threadId));
                   } else {
                     this.userDoesNotExist = true;
@@ -65,7 +66,7 @@ export class CreateMessageComponent implements OnInit {
   private messageFromForm(senderUsername: string, threadId: string): Message {
     return {
       body: this.messageFormGroup.get('body').value,
-      sendDate: new Date(),
+      sendDate: firebase.firestore.Timestamp.now(),
       sender: {
         username: senderUsername,
       },

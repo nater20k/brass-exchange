@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Message } from '@nater20k/brass-exchange-users';
+import firebase from 'firebase';
 import { of } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
 import { MessageApiService } from 'src/app/services/message/message-api.service';
@@ -77,7 +78,7 @@ export class ContactSellerComponent implements OnInit, AfterViewInit {
   private messageAdapter(senderUsername: string, threadId: string = ''): Message {
     return {
       body: `Message in regards to ${this.instrumentName}. ${this.messageBody.value}`,
-      sendDate: new Date(),
+      sendDate: firebase.firestore.Timestamp.now(),
       sender: {
         username: senderUsername,
       },
