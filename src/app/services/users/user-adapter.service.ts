@@ -12,7 +12,7 @@ export class UserAdapterService {
           ...this.mapFormGroupUser(userFormGroup),
           ...this.mapPartialFirebaseUser(user),
         }
-      : this.mapFullFirebaseUser(user, displayName);
+      : this.mapFullFirebaseUser(user);
   }
 
   private mapPartialFirebaseUser({ user }: firebase.auth.UserCredential): any {
@@ -24,7 +24,7 @@ export class UserAdapterService {
     };
   }
 
-  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential, displayName?: string): any {
+  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential): any {
     const mappedUser: any = {
       uid: user.uid,
       firstName: (additionalUserInfo.profile as any).given_name,
@@ -36,9 +36,6 @@ export class UserAdapterService {
       instrumentsListed: [],
       rating: 0,
     };
-    if (displayName) {
-      mappedUser.displayName = displayName;
-    }
     return mappedUser;
   }
 

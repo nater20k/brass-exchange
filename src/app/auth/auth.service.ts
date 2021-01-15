@@ -30,12 +30,13 @@ export class AuthService {
     );
   }
 
-  googleSignIn(): Observable<User> {
+  googleSignIn(): Observable<firebase.auth.UserCredential> {
     const provider = new firebase.auth.GoogleAuthProvider();
     return from(this.afAuth.signInWithPopup(provider)).pipe(
-      switchMap((user: firebase.auth.UserCredential) =>
-        from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))
-      ),
+      // tap((user) => (isNewUser = user.additionalUserInfo.isNewUser)),
+      // switchMap((user: firebase.auth.UserCredential) =>
+      //   from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))
+      // ),
       tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION))
     );
   }
@@ -65,23 +66,21 @@ export class AuthService {
     );
   }
 
+  updateUserData(
+    user: firebase.auth.UserCredential,
+    userFormGroup?: UserFormGroup
+  ): Observable<void | DocumentReference> {
+    if (user.additionalUserInfo.isNewUser) {
+      return this.userApiService.createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
+    } else {
+      return this.userApiService.updateUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
+    }
+  }
   private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
     return this.userApiService.getSingleUser(user.user.uid).pipe(
       take(1),
       catchError(() => of(null))
     );
-  }
-
-  private updateUserData(
-    user: firebase.auth.UserCredential,
-    userFormGroup?: UserFormGroup
-  ): Observable<void | DocumentReference> {
-    if (user.additionalUserInfo.isNewUser) {
-      const displayName = this.displayNamePrompt();
-      return this.userApiService.createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup, displayName));
-    } else {
-      return this.userApiService.updateUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
-    }
   }
 
   private displayNamePrompt() {
