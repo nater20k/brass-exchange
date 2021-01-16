@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
+import firebase from 'firebase/app';
+import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
@@ -14,6 +16,8 @@ export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
   loggedOut = false;
   loginError = false;
+  supplementaryInfoNeeded = false; // TODO Change me
+  partialUser: Observable<firebase.auth.UserCredential>;
 
   constructor(
     public authService: AuthService,
@@ -56,8 +60,13 @@ export class LoginComponent implements OnInit {
     this.authService
       .googleSignIn()
       .pipe(take(1))
-      .subscribe(() => {
-        this.navService.navigateTo(locations.instruments.home);
+      .subscribe((user) => {
+        if (user.additionalUserInfo.isNewUser) {
+          this.partialUser = of(user);
+          this.supplementaryInfoNeeded = true;
+        } else {
+          this.navService.navigateTo(locations.instruments.home);
+        }
       });
   }
 
