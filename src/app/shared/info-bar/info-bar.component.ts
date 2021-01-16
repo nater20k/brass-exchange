@@ -17,6 +17,7 @@ export class InfoBarComponent implements OnInit {
   @Input() displayContactSeller = false;
   isFavorited = false;
   user: User;
+  sellerUsername: string;
 
   constructor(
     private auth: AuthService,

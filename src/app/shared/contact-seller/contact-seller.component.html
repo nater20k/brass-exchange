@@ -1,13 +1,13 @@
-<div class="rounded-b-md mx-2">
+<div class="px-2 bg-blue-500">
   <form *ngIf="!messageSentSuccessfully; else success" [formGroup]="formGroup" (ngSubmit)="sendMessage()">
     <div class="text-center">
-      <label class="block py-2 font-bold uppercase text-gray-800" for="body">Message</label>
+      <label class="block py-2 font-bold uppercase text-white" for="body">Message</label>
       <textarea id="body" class="w-full rounded-md shadow-md p-1" formControlName="body" name="content"></textarea>
     </div>
     <div class="flex justify-around p-4">
-      <button class="rounded-lg px-8 py-2 bg-red-500 text-white shadow-md mx-4" type="button"
+      <button class="rounded-lg px-8 py-2 bg-red-600 text-white shadow-md mx-4" type="button"
         (click)="clearForm()">Clear</button>
-      <button class="rounded-lg px-8 py-2 bg-blue-500 text-white shadow-md mx-4" type="submit"
+      <button class="rounded-lg px-8 py-2 bg-blue-600 text-white shadow-md mx-4" type="submit"
         [disabled]="!messageBody.valid">
         Send
       </button>

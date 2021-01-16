@@ -1,6 +1,6 @@
 <div *ngIf="imageUrls$ | async as imageUrls">
   <app-loading *ngIf="!isAllPageLoaded"></app-loading>
-  <ng-container class="w-full bg-white" *ngIf="!isHeroImage">
+  <ng-container class="w-full bg-white " *ngIf="!isHeroImage">
     <drag-scroll class="bg-white">
       <img drag-scroll-item class="h-auto object-fill image" (load)="toggleImagesLoaded()"
         *ngFor="let imageUrl of imageUrls" src="{{ imageUrl }}" alt="Instrument Image" />

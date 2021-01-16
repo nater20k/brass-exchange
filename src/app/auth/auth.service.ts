@@ -33,10 +33,6 @@ export class AuthService {
   googleSignIn(): Observable<firebase.auth.UserCredential> {
     const provider = new firebase.auth.GoogleAuthProvider();
     return from(this.afAuth.signInWithPopup(provider)).pipe(
-      // tap((user) => (isNewUser = user.additionalUserInfo.isNewUser)),
-      // switchMap((user: firebase.auth.UserCredential) =>
-      //   from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))
-      // ),
       tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION))
     );
   }
