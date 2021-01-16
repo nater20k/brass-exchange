@@ -8,15 +8,15 @@
 <ng-container *ngIf="showComments">
   <div class="box-border p-4 shadow-md mb-4 border-gray-500 rounded-lg mt-4 bg-blue-500 text-white"
     *ngFor="let comment of comments">
-    <div class="flex justify-between border-b-2 border-gray-400 px-2">
+    <div class="flex justify-between border-b-2 border-gray-400">
       <div>
         {{ comment.username }}
       </div>
       <div>
-        {{ comment.createdDate.toDate() | date: 'short' }}
+        {{ $any(comment.createdDate).toDate() | date: 'short' }}
       </div>
     </div>
-    <div class="pt-2 text-sm px-2">
+    <div class="pt-2 text-sm">
       {{ comment.content }}
     </div>
   </div>
