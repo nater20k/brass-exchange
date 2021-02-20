@@ -83,6 +83,7 @@ export class UserApiService {
 
   addToPersonalInstrumentsListed(userId: string, forSaleListing: ForSaleListing): Observable<void> {
     return this.getSingleUser(userId).pipe(
+      take(1),
       map((user) => {
         user.instrumentsListed.push(forSaleListing);
         return user;
