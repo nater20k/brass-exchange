@@ -30,9 +30,9 @@ export class UserApiService {
       .valueChanges()
       .pipe(
         map((user) => ({
-          uid: userId,
-          dateAccountCreated: (user.dateAccountCreated as any).toDate(),
           ...user,
+          uid: userId,
+          dateAccountCreated: new Date((user.dateAccountCreated as any).toDate()),
         })),
         catchError(() => of(null))
       );
