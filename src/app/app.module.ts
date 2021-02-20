@@ -1,21 +1,22 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MarketplaceComponent } from './marketplace/marketplace.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { environment } from 'src/environments/environment';
-import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ContactUsComponent } from './contact-us/contact-us.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ProfileComponent } from './profile/profile.component';
+import { environment } from 'src/environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
 import { SupplementaryInfoComponent } from './auth/register/supplementary-info/supplementary-info.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
+import { ProfileComponent } from './profile/profile.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SupplementaryInfoComponent } from './auth/register/supplementary-info/s
     ContactUsComponent,
     ProfileComponent,
     SupplementaryInfoComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +38,7 @@ import { SupplementaryInfoComponent } from './auth/register/supplementary-info/s
     AngularFireStorageModule,
     ReactiveFormsModule,
     ClickOutsideModule,
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
