@@ -29,8 +29,11 @@ export class UserApiService {
       .doc<User>(userId)
       .valueChanges()
       .pipe(
-        map((user) => ({ uid: userId, ...user })),
-        tap((user) => console.log('API', user)),
+        map((user) => ({
+          uid: userId,
+          dateAccountCreated: (user.dateAccountCreated as any).toDate(),
+          ...user,
+        })),
         catchError(() => of(null))
       );
   }

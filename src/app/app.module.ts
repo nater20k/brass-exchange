@@ -13,10 +13,10 @@ import { RegisterComponent } from './auth/register/register.component';
 import { SupplementaryInfoComponent } from './auth/register/supplementary-info/supplementary-info.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SharedModule } from './shared/shared.module';
-import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [

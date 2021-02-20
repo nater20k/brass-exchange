@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BE } from '@nater20k/brass-exchange-constants';
 import { User } from '@nater20k/brass-exchange-users';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { keys, SessionService } from 'src/app/services/session.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
 
@@ -13,36 +15,41 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
 export class EditProfileComponent implements OnInit {
   @Output() editSubmitted: EventEmitter<void> = new EventEmitter();
   @Input() user: User;
-  editUserFormGroup: FormGroup;
+  editUserFormGroup: Observable<FormGroup>;
   instruments = BE.INSTRUMENTS.BRASS.sort();
+  userId: string;
+
   constructor(private fb: FormBuilder, private userApi: UserApiService, private sessionService: SessionService) {}
 
   ngOnInit(): void {
     this.editUserFormGroup = this.buildForm();
   }
 
-  buildForm(): FormGroup {
-    return this.fb.group({
-      firstName: this.fb.control(this.user.firstName, Validators.required),
-      lastName: this.fb.control(this.user.lastName, Validators.required),
-      displayName: this.fb.control(this.user.displayName, Validators.required),
-      email: this.fb.control(this.user.email, [Validators.required, Validators.email]),
-      principalInstrument: this.fb.control(this.user.principalInstrument, Validators.required),
-    });
+  buildForm(): Observable<FormGroup> {
+    return of(this.user).pipe(
+      tap((user) => (this.userId = user.uid)),
+      map((user) =>
+        this.fb.group({
+          firstName: this.fb.control(user.firstName, Validators.required),
+          lastName: this.fb.control(user.lastName, Validators.required),
+          displayName: this.fb.control(user.displayName, Validators.required),
+          photoUrl: this.fb.control(user.photoUrl),
+          email: this.fb.control(user.email, [Validators.required, Validators.email]),
+          principalInstrument: this.fb.control(user.principalInstrument, Validators.required),
+        })
+      )
+    );
   }
 
-  submit() {
-    if (this.editUserFormGroup.dirty) {
-      console.log({ uid: this.user.uid, ...(this.editUserFormGroup.value as Partial<User>) });
-      this.userApi
-        .updateUser({ uid: this.user.uid, ...(this.editUserFormGroup.value as Partial<User>) })
-        .subscribe(() => {
-          this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser);
-          this.editSubmitted.emit();
-          this.user = null;
-        });
+  submit(form: FormGroup) {
+    if (form.dirty) {
+      this.userApi.updateUser({ uid: this.userId, ...(form.value as Partial<User>) }).subscribe(() => {
+        this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser);
+        this.editSubmitted.emit();
+        this.user = null;
+      });
     } else {
-      console.log('ELSE');
+      this.editSubmitted.emit();
     }
   }
 }

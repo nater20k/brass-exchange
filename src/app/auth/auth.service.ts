@@ -26,8 +26,11 @@ export class AuthService {
       : this.afAuth.authState.pipe(
           switchMap((user) => {
             if (user) {
-              this.sessionService.setToLocalStorage(user, keys.loggedInUser);
-              return this.userApiService.getSingleUser(user.uid);
+              return this.userApiService.getSingleUser(user.uid).pipe(
+                tap((mappedUser) => {
+                  this.sessionService.setToLocalStorage(mappedUser, keys.loggedInUser);
+                })
+              );
             } else {
               return of(null);
             }

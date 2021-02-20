@@ -15,7 +15,6 @@ export class SessionService {
   }
 
   getItemFromLocalStorage<T>(key: string): T {
-    console.log('LOCAL');
     let response;
     if (localStorage[`${this.localStorageKeyPrefix}-${key}`]) {
       response = JSON.parse(localStorage[`${this.localStorageKeyPrefix}-${key}`]);
