@@ -1,0 +1,30 @@
+<div class="w-full max-w-xs m-auto mt-8">
+  <div class="text-center">
+    <h1>Hey there!</h1>
+    <h2>We just need a little more info</h2>
+  </div>
+  <form *ngIf="registrationFormGroup" [formGroup]="registrationFormGroup.formGroup" (ngSubmit)="submit()">
+    <div class="mb-2">
+      <label class="block text-gray-700 text-sm font-bold mb-1" for="username"> Username </label>
+      <input placeholder="Username" formControlName="displayName"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        type="text" id="username" />
+    </div>
+    <div class="mb-2">
+      <label class="block text-gray-700 text-sm font-bold mb-1" for="instrument"> Instrument </label>
+      <select id="type" formControlName="instrument"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline bg-white">
+        <option value="">Personal Instrument</option>
+        <option [ngValue]="instrument" *ngFor="let instrument of instruments">
+          {{ instrument | titlecase }}
+        </option>
+      </select>
+    </div>
+    <div class="flex justify-end">
+
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Finish
+      </button>
+    </div>
+  </form>
+</div>

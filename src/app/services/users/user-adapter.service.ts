@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { User } from '@nater20k/brass-exchange-users';
-import { UserFormGroup } from '@nater20k/brass-exchange-users';
+import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserAdapterService {
-  mapUserFromRegister(user: firebase.auth.UserCredential, userFormGroup?: UserFormGroup): User {
+  mapUserFromRegister(user: firebase.auth.UserCredential, userFormGroup?: UserFormGroup, displayName?: string): User {
     return userFormGroup
       ? {
           ...this.mapFormGroupUser(userFormGroup),
@@ -16,7 +15,7 @@ export class UserAdapterService {
       : this.mapFullFirebaseUser(user);
   }
 
-  mapPartialFirebaseUser({ user }: firebase.auth.UserCredential) {
+  private mapPartialFirebaseUser({ user }: firebase.auth.UserCredential): any {
     return {
       uid: user.uid,
       email: user.email,
@@ -25,12 +24,11 @@ export class UserAdapterService {
     };
   }
 
-  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential) {
-    return {
+  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential): any {
+    const mappedUser: any = {
       uid: user.uid,
-      displayName: user.displayName,
-      firstName: additionalUserInfo.profile['given_name'],
-      lastName: additionalUserInfo.profile['family_name'],
+      firstName: (additionalUserInfo.profile as any).given_name,
+      lastName: (additionalUserInfo.profile as any).family_name,
       email: user.email,
       dateAccountCreated: new Date(user.metadata.creationTime),
       photoUrl: user.photoURL,
@@ -38,9 +36,10 @@ export class UserAdapterService {
       instrumentsListed: [],
       rating: 0,
     };
+    return mappedUser;
   }
 
-  private mapFormGroupUser({ firstName, lastName, principalInstrument, displayName }: UserFormGroup) {
+  private mapFormGroupUser({ firstName, lastName, principalInstrument, displayName }: UserFormGroup): any {
     return {
       firstName,
       lastName,

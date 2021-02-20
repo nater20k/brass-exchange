@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { DocumentReference } from '@angular/fire/firestore';
-
-import { Observable, of, from } from 'rxjs';
-import { switchMap, take, catchError, tap, map } from 'rxjs/operators';
-import { UserApiService } from '../services/users/user-api.service';
 import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
+import firebase from 'firebase/app';
+import { from, Observable, of } from 'rxjs';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import { UserAdapterService } from '../services/users/user-adapter.service';
+import { UserApiService } from '../services/users/user-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,14 +30,10 @@ export class AuthService {
     );
   }
 
-  googleSignIn(): Observable<User> {
+  googleSignIn(): Observable<firebase.auth.UserCredential> {
     const provider = new firebase.auth.GoogleAuthProvider();
-
     return from(this.afAuth.signInWithPopup(provider)).pipe(
-      switchMap((user) => from(this.updateUserData(user).pipe(switchMap(() => this.fetchFirestoreUser(user))))),
-
-      take(1),
-      catchError(() => of(null))
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION))
     );
   }
 
@@ -47,6 +42,7 @@ export class AuthService {
 
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       switchMap((user) => this.updateUserData(user, userFormGroup)),
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)),
       take(1)
     );
   }
@@ -54,14 +50,8 @@ export class AuthService {
   emailSignIn(params: UserFormGroup): Observable<User | Error> {
     return from(this.afAuth.signInWithEmailAndPassword(params.email, params.password)).pipe(
       switchMap((user) => this.fetchFirestoreUser(user)),
+      tap(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)),
       take(1)
-    );
-  }
-
-  private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
-    return this.userApiService.getSingleUser(user.user.uid).pipe(
-      take(1),
-      catchError(() => of(null))
     );
   }
 
@@ -72,12 +62,24 @@ export class AuthService {
     );
   }
 
-  private updateUserData(
+  updateUserData(
     user: firebase.auth.UserCredential,
     userFormGroup?: UserFormGroup
   ): Observable<void | DocumentReference> {
-    return this.userApiService
-      .createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup))
-      .pipe(catchError(() => of(null)));
+    if (user.additionalUserInfo.isNewUser) {
+      return this.userApiService.createUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
+    } else {
+      return this.userApiService.updateUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
+    }
+  }
+  private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
+    return this.userApiService.getSingleUser(user.user.uid).pipe(
+      take(1),
+      catchError(() => of(null))
+    );
+  }
+
+  private displayNamePrompt() {
+    return prompt('What would you like your username to be?'); // TODO implement with real modal
   }
 }

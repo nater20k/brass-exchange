@@ -1,0 +1,25 @@
+<div #scroll class="bg-indigo-200 screen overflow-scroll">
+  <div *ngIf="thread$ | async as thread">
+    <div class="bg-gray-100 w-full fixed ">
+      <h2 class="p-2 text-xl text-center font-bold text-gray-800">{{recipientUsername | titlecase}}</h2>
+    </div>
+    <div class="rounded-md pt-12">
+      <div *ngFor="let message of thread.messages" class="mx-auto pb-1">
+        <div class="flex justify-end" *ngIf="message.sender.username === senderUsername">
+          <div class="text-left py-1 px-2 rounded-xl my-1 mx-2  bg-blue-700 text-gray-100 ml-10 text-md">
+            <p>{{message.body}}</p>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-start" *ngIf="message.sender.username !== senderUsername">
+            <div class="inline-block text-left py-1 px-2 rounded-xl my-1 mx-2 bg-gray-200 text-gray-800 text-md mr-10">
+              <p>{{message.body}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-create-message class="fixed bottom-0 w-full" [threadId]="threadId" [inputRecipientUsername]="recipientUsername">
+  </app-create-message>
+</div>

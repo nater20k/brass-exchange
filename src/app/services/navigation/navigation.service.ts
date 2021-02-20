@@ -7,18 +7,18 @@ import { Router } from '@angular/router';
 export class NavigationService {
   constructor(private router: Router) {}
 
-  navigateTo(location: string) {
+  navigateTo(location: string): void {
     this.router.navigate([location]);
   }
 }
 
-export const LOCATIONS = {
-  INSTRUMENTS: {
-    HOME: 'instruments',
-    BUY: 'instruments/for-sale',
-    SELL: 'instruments/sell',
-    DETAIL: (id: string) => `instruments/detail/${id}`,
+export const locations = {
+  instruments: {
+    home: 'instruments',
+    buy: 'instruments/for-sale',
+    sell: 'instruments/sell',
+    detail: (id: string) => `instruments/detail/${id}`,
   },
   services: 'services',
-  LOGIN: 'login',
+  login: 'login',
 };

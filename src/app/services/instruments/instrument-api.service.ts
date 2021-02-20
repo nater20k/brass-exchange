@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { BE } from '@nater20k/brass-exchange-constants';
-import {
-  ForSaleListing,
-  Instrument,
-  Comment,
-  ForSaleInstrumentListingFormGroup,
-} from '@nater20k/brass-exchange-instruments';
+import { Comment, ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InstrumentApiService {
-  constructor(private afs: AngularFirestore) {}
   instrumentPath = this.afs.collection<ForSaleListing>('instruments-for-sale');
+
+  constructor(private afs: AngularFirestore) {}
 
   getGenericInstruments(): Observable<string[]> {
     return of(BE.INSTRUMENTS.BRASS).pipe(map((instruments) => instruments.sort()));
@@ -93,22 +89,22 @@ export class InstrumentApiService {
   }
 
   deactivateInstrument(id: string): Observable<void> {
-    return from(this.instrumentPath.doc(id).set({ isActive: false }));
+    return from(this.instrumentPath.doc<ForSaleListing>(id).update({ isActive: false }));
   }
 
   activateInstrument(id: string): Observable<void> {
-    return from(this.instrumentPath.doc(id).set({ isActive: true }));
+    return from(this.instrumentPath.doc(id).update({ isActive: true }));
   }
 
   // COMMENT SECTION
 
-  addCommentToForSaleListing(comment: Comment, instrumentId: string) {
+  addCommentToForSaleListing(comment: Comment, instrumentId: string): Observable<void> {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
-      switchMap((instrument) => {
-        instrument?.comments?.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment]);
-        return this.updateInstrument(instrument);
-      })
+      tap((instrument) =>
+        instrument?.comments?.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment])
+      ),
+      switchMap((instrument) => this.updateInstrument(instrument))
     );
   }
 
@@ -117,20 +113,16 @@ export class InstrumentApiService {
   addFavoriteToForSaleListing(instrumentId: string): Observable<void> {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
-      switchMap((instrument) => {
-        instrument?.favorites ? (instrument.favorites += 1) : (instrument.favorites = 1);
-        return this.updateForSaleListing(instrument);
-      })
+      tap((instrument) => (instrument?.favorites ? (instrument.favorites += 1) : (instrument.favorites = 1))),
+      switchMap((instrument) => this.updateForSaleListing(instrument))
     );
   }
 
-  removeFavoriteToForSaleListing(instrumentId: string): Observable<void> {
+  removeFavoriteFromForSaleListing(instrumentId: string): Observable<void> {
     return this.getInstrumentById(instrumentId).pipe(
       take(1),
-      switchMap((instrument) => {
-        instrument?.favorites ? (instrument.favorites -= 1) : (instrument.favorites = 0);
-        return this.updateForSaleListing(instrument);
-      })
+      tap((instrument) => (instrument?.favorites ? (instrument.favorites -= 1) : (instrument.favorites = 0))),
+      switchMap((instrument) => this.updateForSaleListing(instrument))
     );
   }
 }

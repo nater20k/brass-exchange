@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ForSaleListing } from '@nater20k/brass-exchange-instruments';
+import { User } from '@nater20k/brass-exchange-users';
 import { forkJoin } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
@@ -13,41 +14,54 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
 })
 export class InfoBarComponent implements OnInit {
   @Input() forSaleListing: ForSaleListing;
-  // @Output()
+  @Input() displayContactSeller = false;
+  isFavorited = false;
+  user: User;
+  sellerUsername: string;
+
   constructor(
     private auth: AuthService,
     private userApi: UserApiService,
     private instrumentApi: InstrumentApiService
   ) {}
 
-  ngOnInit(): void {}
-
-  contactSeller() {
-    alert('Contact Seller');
+  ngOnInit(): void {
+    this.auth.user$.pipe(take(1)).subscribe((user) => {
+      this.user = user;
+      this.isFavorited = this.isInstrumentFavorited(user.favoritedInstruments);
+    });
   }
 
-  augmentFavorite() {
-    return this.auth.user$
+  contactSeller(): void {
+    this.displayContactSeller = !this.displayContactSeller;
+  }
+
+  augmentFavorite(): void {
+    const localIsFavorited = this.isFavorited;
+    this.isFavorited = !this.isFavorited;
+    forkJoin([
+      localIsFavorited
+        ? this.instrumentApi.removeFavoriteFromForSaleListing(this.forSaleListing.id)
+        : this.instrumentApi.addFavoriteToForSaleListing(this.forSaleListing.id),
+      localIsFavorited
+        ? this.userApi.removeFavoritedInstrumentFromUser(this.user.uid, this.forSaleListing)
+        : this.userApi.addFavoritedInstrumentToUser(this.user.uid, this.forSaleListing),
+    ])
       .pipe(
         take(1),
-        switchMap((user) => {
-          const isFavorited = this.isInstrumentFavorited(user?.favoritedInstruments);
-          return forkJoin({
-            augmentedFavoriteCount: isFavorited
-              ? this.instrumentApi.removeFavoriteToForSaleListing(this.forSaleListing.id)
-              : this.instrumentApi.addFavoriteToForSaleListing(this.forSaleListing.id),
-            augmentedFavoriteInstrumentList: isFavorited
-              ? this.userApi.removeFavoritedInstrumentFromUser(user.uid, this.forSaleListing)
-              : this.userApi.addFavoritedInstrumentToUser(user.uid, this.forSaleListing),
-          });
+        catchError(() => {
+          this.isFavorited = !this.isFavorited;
+          return null;
         })
       )
       .subscribe();
   }
 
   isInstrumentFavorited(forSaleListings: ForSaleListing[]): boolean {
-    return forSaleListings
-      ? forSaleListings.some((forSaleListing) => (forSaleListing.id = this.forSaleListing.id))
-      : false;
+    return forSaleListings?.some((forSaleListing) => forSaleListing.id === this.forSaleListing.id);
+  }
+
+  get instrumentName(): string {
+    return `${this.forSaleListing.brand} ${this.forSaleListing.model}`;
   }
 }

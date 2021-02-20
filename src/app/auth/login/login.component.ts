@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
-import { of } from 'rxjs';
-import { catchError, take } from 'rxjs/operators';
-import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
+import firebase from 'firebase/app';
+import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -15,6 +16,8 @@ export class LoginComponent implements OnInit {
   loginFormGroup: FormGroup;
   loggedOut = false;
   loginError = false;
+  supplementaryInfoNeeded = false; // TODO Change me
+  partialUser: Observable<firebase.auth.UserCredential>;
 
   constructor(
     public authService: AuthService,
@@ -32,7 +35,7 @@ export class LoginComponent implements OnInit {
         this.loginFormGroup = this.formService.emailAndPasswordLoginForm();
         this.loggedOut = true;
       } else {
-        this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
+        this.navService.navigateTo(locations.instruments.home);
       }
     });
   }
@@ -44,7 +47,7 @@ export class LoginComponent implements OnInit {
       .emailSignIn(userLogin)
       .pipe(take(1))
       .subscribe(
-        () => this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME),
+        () => this.navService.navigateTo(locations.instruments.home),
         () => {
           this.loginError = true;
           this.loginFormGroup.reset();
@@ -57,12 +60,17 @@ export class LoginComponent implements OnInit {
     this.authService
       .googleSignIn()
       .pipe(take(1))
-      .subscribe(() => {
-        this.navService.navigateTo(LOCATIONS.INSTRUMENTS.HOME);
+      .subscribe((user) => {
+        if (user.additionalUserInfo.isNewUser) {
+          this.partialUser = of(user);
+          this.supplementaryInfoNeeded = true;
+        } else {
+          this.navService.navigateTo(locations.instruments.home);
+        }
       });
   }
 
-  forgotPassword() {
+  forgotPassword(): void {
     alert('TODO');
   }
 

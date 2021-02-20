@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   templateUrl: './sell.component.html',
   styleUrls: ['./sell.component.scss'],
 })
-export class SellComponent implements OnInit {
+export class SellComponent {
   sellOption: SellInterface = 'list';
-  constructor() {}
 
-  ngOnInit(): void {}
-
-  switchView(option: SellInterface) {
+  switchView(option: SellInterface): void {
     this.sellOption = option;
   }
 }

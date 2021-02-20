@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { AbstractControl, FormControl } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
@@ -9,5 +9,4 @@ import { AbstractControl, FormControl } from '@angular/forms';
 export class InputComponent {
   @Input() label: string;
   @Input() inputFormControl: AbstractControl;
-  constructor() {}
 }

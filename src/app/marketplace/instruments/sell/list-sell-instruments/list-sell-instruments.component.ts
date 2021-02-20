@@ -3,7 +3,7 @@ import { ForSaleListing } from '@nater20k/brass-exchange-instruments';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
-import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
 
 @Component({
@@ -19,17 +19,17 @@ export class ListSellInstrumentsComponent implements OnInit {
     private navService: NavigationService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchInstrumentsListedByUser();
   }
 
-  fetchInstrumentsListedByUser() {
+  fetchInstrumentsListedByUser(): void {
     this.instrumentsList = this.authService.user$.pipe(
       switchMap((user) => this.userApi.getInstrumentsForSaleByUser(user.uid))
     );
   }
 
   navigateToDetail(id: string): void {
-    this.navService.navigateTo(LOCATIONS.INSTRUMENTS.DETAIL(id));
+    this.navService.navigateTo(locations.instruments.detail(id));
   }
 }

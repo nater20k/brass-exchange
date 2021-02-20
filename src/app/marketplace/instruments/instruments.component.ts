@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LOCATIONS, NavigationService } from 'src/app/services/navigation/navigation.service';
+import { Component } from '@angular/core';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: 'app-instruments',
@@ -10,10 +10,10 @@ export class InstrumentsComponent {
   constructor(private navService: NavigationService) {}
 
   navigateToBuy(): void {
-    this.navService.navigateTo(LOCATIONS.INSTRUMENTS.BUY);
+    this.navService.navigateTo(locations.instruments.buy);
   }
 
   navigateToSell(): void {
-    this.navService.navigateTo(LOCATIONS.INSTRUMENTS.SELL);
+    this.navService.navigateTo(locations.instruments.sell);
   }
 }

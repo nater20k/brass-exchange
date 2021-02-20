@@ -1,12 +1,21 @@
-<div class="bg-blue-500 py-2 px-2 flex justify-between h-12 rounded-b-md">
-  <!-- Contact Seller/Request more info -->
+<div class="pt-2 pb-2 flex justify-between h-12 border-b-2 border-gray-400 mx-4">
+
   <div class="ml-2" (click)="contactSeller()">
     <img class="w-8" src="../../../assets/icons/email.svg" alt="" />
   </div>
 
   <!-- Favorites -->
   <div class="flex justify-between text-white" (click)="augmentFavorite()">
-    <img class="w-8 mr-1" src="../../../assets/icons/favorite-heart-button.svg" alt="" />
-    <p class="mr-2 text-xl font-bold">{{ forSaleListing.favorites }}</p>
+    <img *ngIf="isFavorited; else notFavorite" class="w-8 mr-1" src="../../../assets/icons/heart-pink.svg" alt="" />
+    <ng-template #notFavorite>
+      <img class="w-8 mr-1" src="../../../assets/icons/favorite-heart-button.svg" alt="" />
+    </ng-template>
+    <div class="align-text-top">
+      <p class="mr-2 text-xs font-bold align-text-top">{{ forSaleListing.favorites }}</p>
+    </div>
   </div>
 </div>
+<app-contact-seller (closeMessageComponent)="contactSeller()" [instrumentName]="instrumentName"
+  [inquirerUsername]="user.displayName" [sellerId]="forSaleListing.ownerId" [instrumentId]="forSaleListing.id"
+  *ngIf="displayContactSeller">
+</app-contact-seller>

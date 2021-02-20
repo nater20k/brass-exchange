@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { User } from '@nater20k/brass-exchange-users';
-import { Observable, from, of } from 'rxjs';
-import { map, switchMap, take, catchError } from 'rxjs/operators';
+import firebase from 'firebase/app';
+import { from, Observable, of } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserApiService {
-  constructor(private afs: AngularFirestore) {}
   afsPath = this.afs.collection<User>('users');
+
+  constructor(private afs: AngularFirestore) {}
 
   // Create
   createUser(user: User): Observable<DocumentReference | void> {
@@ -33,10 +35,31 @@ export class UserApiService {
   }
 
   getUserByEmail(email: string): Observable<User> {
-    return this.afsPath.valueChanges().pipe(
-      map((users) => users.find((user) => (user.email = email))),
-      catchError(() => of(null))
-    );
+    return this.afs
+      .collection<User>('users', (ref) => ref.where('email', '==', email))
+      .valueChanges()
+      .pipe(map((users) => users[0]));
+  }
+
+  getUserByUsername(username: string): Observable<User> {
+    return this.afs
+      .collection<User>('users', (ref) => ref.where('displayName', '==', username))
+      .valueChanges()
+      .pipe(
+        take(1),
+        map((users) => users[0]),
+        catchError((err) => of(null))
+      );
+  }
+
+  fetchUserMetaDataIfExists(username: string): Observable<boolean> {
+    return this.afs
+      .collection<User>('users', (ref) => ref.where('displayName', '==', username))
+      .valueChanges()
+      .pipe(
+        take(1),
+        map((users) => users.length > 0)
+      );
   }
 
   // Update
@@ -82,24 +105,38 @@ export class UserApiService {
   // FAVORITES SECTION
 
   addFavoritedInstrumentToUser(userId: string, instrument: ForSaleListing): Observable<void> {
-    return this.getSingleUser(userId).pipe(
-      switchMap((user) => {
-        user?.favoritedInstruments
-          ? user.favoritedInstruments.push(instrument)
-          : (user.favoritedInstruments = [instrument]);
-        return this.updateUser(user);
-      })
+    return from(
+      this.afs
+        .collection('users')
+        .doc(userId)
+        .update({
+          favoritedInstruments: firebase.firestore.FieldValue.arrayUnion(instrument),
+        })
     );
   }
 
   removeFavoritedInstrumentFromUser(userId: string, forSaleListing: ForSaleListing): Observable<void> {
+    // return this.getSingleUser(userId).pipe(
+    //   switchMap((user) => {
+    //     const remainingFavorites = user.favoritedInstruments.filter(
+    //       (instrument) => instrument.id !== forSaleListing.id
+    //     );
+    //     return this.updateUser({
+    //       ...user,
+    //       favoritedInstruments: firebase.firestore.FieldValue.arrayRemove(forSaleListing) as any,
+    //     });
+    //   })
+    // );
+
     return this.getSingleUser(userId).pipe(
-      switchMap((user) => {
-        const remainingFavorites = user.favoritedInstruments.filter(
-          (instrument) => instrument.id !== forSaleListing.id
-        );
-        return this.updateUser({ ...user, favoritedInstruments: remainingFavorites });
-      })
+      map(
+        (user) =>
+          (user = {
+            ...user,
+            favoritedInstruments: user.favoritedInstruments.filter((instrument) => instrument.id !== forSaleListing.id),
+          })
+      ),
+      switchMap((user) => this.updateUser(user))
     );
   }
 }
