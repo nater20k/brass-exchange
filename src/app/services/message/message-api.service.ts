@@ -97,7 +97,7 @@ export class MessageApiService {
 
   fetchThreadIdByRecipient(message: Message): Observable<string> {
     return this.auth.user$.pipe(
-      map((user) => user?.threads.find((thread) => thread.recipient === message.recipient.username)),
+      map((user) => user?.threads?.find((thread) => thread.recipient === message.recipient.username)),
       map((metaData) => metaData?.id)
     );
   }

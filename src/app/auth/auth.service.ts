@@ -5,6 +5,7 @@ import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 import { from, Observable, of } from 'rxjs';
 import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { keys, SessionService } from '../services/session.service';
 import { UserAdapterService } from '../services/users/user-adapter.service';
 import { UserApiService } from '../services/users/user-api.service';
 
@@ -17,17 +18,24 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private userAdapter: UserAdapterService,
-    private userApiService: UserApiService
+    private userApiService: UserApiService,
+    private sessionService: SessionService
   ) {
-    this.user$ = this.afAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.userApiService.getSingleUser(user.uid);
-        } else {
-          return of(null);
-        }
-      })
-    );
+    this.user$ = sessionService.getItemFromLocalStorage<User>(keys.loggedInUser)
+      ? of(sessionService.getItemFromLocalStorage(keys.loggedInUser))
+      : this.afAuth.authState.pipe(
+          switchMap((user) => {
+            if (user) {
+              return this.userApiService.getSingleUser(user.uid).pipe(
+                tap((mappedUser) => {
+                  this.sessionService.setToLocalStorage(mappedUser, keys.loggedInUser);
+                })
+              );
+            } else {
+              return of(null);
+            }
+          })
+        );
   }
 
   googleSignIn(): Observable<firebase.auth.UserCredential> {
@@ -57,6 +65,7 @@ export class AuthService {
 
   signOut(): Observable<void> {
     return from(this.afAuth.signOut()).pipe(
+      tap(() => this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser)),
       take(1),
       catchError(() => of(null))
     );
@@ -77,9 +86,5 @@ export class AuthService {
       take(1),
       catchError(() => of(null))
     );
-  }
-
-  private displayNamePrompt() {
-    return prompt('What would you like your username to be?'); // TODO implement with real modal
   }
 }
