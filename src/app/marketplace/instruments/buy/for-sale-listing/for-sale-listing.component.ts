@@ -9,6 +9,7 @@ import { Finish, ForSaleListing, TubaSize } from '@nater20k/brass-exchange-instr
 })
 export class ForSaleListingComponent {
   @Input() instrument: ForSaleListing;
+  @Input() config: ForSaleListingComponentConfig = { simple: false };
   titleCasePipe = new TitleCasePipe();
 
   get instrumentId(): string {
@@ -76,4 +77,8 @@ export class ForSaleListingComponent {
   get ownerId(): string {
     return this.instrument.ownerId;
   }
+}
+
+export interface ForSaleListingComponentConfig {
+  simple: boolean;
 }

@@ -4,7 +4,7 @@ import { ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments
 import { User } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,8 @@ export class UserApiService {
       .doc<User>(userId)
       .valueChanges()
       .pipe(
-        take(1),
+        map((user) => ({ uid: userId, ...user })),
+        tap((user) => console.log('API', user)),
         catchError(() => of(null))
       );
   }
