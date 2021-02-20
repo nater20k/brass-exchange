@@ -81,6 +81,7 @@ export class AuthService {
       return this.userApiService.updateUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
     }
   }
+
   private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
     return this.userApiService.getSingleUser(user.user.uid).pipe(
       take(1),
