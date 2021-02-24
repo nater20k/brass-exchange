@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 
@@ -16,11 +16,11 @@ export class NavbarComponent {
   logout(): void {
     this.auth
       .signOut()
-      .pipe(take(1))
-      .subscribe(() => {
-        this.isMenuOpen = false;
-        this.navService.navigateTo(locations.login);
-      });
+      .pipe(
+        tap(() => (this.isMenuOpen = false)),
+        switchMap(() => this.navService.navigateTo(locations.login))
+      )
+      .subscribe();
   }
 
   toggleMenu(option?: boolean): void {

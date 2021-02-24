@@ -4,7 +4,7 @@ import { DocumentReference } from '@angular/fire/firestore';
 import { User, UserFormGroup } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 import { from, Observable, of } from 'rxjs';
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, finalize, switchMap, take, tap } from 'rxjs/operators';
 import { keys, SessionService } from '../services/session.service';
 import { UserAdapterService } from '../services/users/user-adapter.service';
 import { UserApiService } from '../services/users/user-api.service';
@@ -21,8 +21,13 @@ export class AuthService {
     private userApiService: UserApiService,
     private sessionService: SessionService
   ) {
-    this.user$ = sessionService.getItemFromLocalStorage<User>(keys.loggedInUser)
-      ? of(sessionService.getItemFromLocalStorage(keys.loggedInUser))
+    debugger;
+    this.user$ = this.setUser();
+  }
+
+  setUser(): Observable<User> {
+    return this.sessionService.getItemFromLocalStorage<User>(keys.loggedInUser)
+      ? of(this.sessionService.getItemFromLocalStorage(keys.loggedInUser))
       : this.afAuth.authState.pipe(
           switchMap((user) => {
             if (user) {
@@ -65,8 +70,8 @@ export class AuthService {
 
   signOut(): Observable<void> {
     return from(this.afAuth.signOut()).pipe(
-      tap(() => this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser)),
       take(1),
+      finalize(() => this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser)),
       catchError(() => of(null))
     );
   }
@@ -81,6 +86,7 @@ export class AuthService {
       return this.userApiService.updateUser(this.userAdapter.mapUserFromRegister(user, userFormGroup));
     }
   }
+
   private fetchFirestoreUser(user: firebase.auth.UserCredential): Observable<User> {
     return this.userApiService.getSingleUser(user.user.uid).pipe(
       take(1),
