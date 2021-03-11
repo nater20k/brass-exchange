@@ -4,6 +4,7 @@ import { BE } from '@nater20k/brass-exchange-constants';
 import { Comment, ForSaleListing, Instrument } from '@nater20k/brass-exchange-instruments';
 import { from, Observable, of } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
+import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -99,12 +100,20 @@ export class InstrumentApiService {
   // COMMENT SECTION
 
   addCommentToForSaleListing(comment: Comment, instrumentId: string): Observable<void> {
-    return this.getInstrumentById(instrumentId).pipe(
-      take(1),
-      tap((instrument) =>
-        instrument?.comments?.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment])
-      ),
-      switchMap((instrument) => this.updateInstrument(instrument))
+    // return this.getInstrumentById(instrumentId).pipe(
+    //   take(1),
+    //   tap((instrument) =>
+    //     instrument?.comments?.length > 0 ? instrument.comments.push(comment) : (instrument.comments = [comment])
+    //   ),
+    //   tap(console.log),
+    //   switchMap((instrument) => this.updateInstrument(instrument))
+    // );
+
+    const ref = this.afs.collection('instruments-for-sale').doc(instrumentId);
+    return from(
+      ref.update({
+        comments: firebase.firestore.FieldValue.arrayUnion(comment),
+      })
     );
   }
 

@@ -6,7 +6,7 @@ import firebase from 'firebase/app';
   providedIn: 'root',
 })
 export class UserAdapterService {
-  mapUserFromRegister(user: firebase.auth.UserCredential, userFormGroup?: UserFormGroup, displayName?: string): User {
+  mapUserFromRegister(user: firebase.auth.UserCredential, userFormGroup?: UserFormGroup): User {
     return userFormGroup
       ? {
           ...this.mapFormGroupUser(userFormGroup),
@@ -24,8 +24,8 @@ export class UserAdapterService {
     };
   }
 
-  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential): any {
-    const mappedUser: any = {
+  private mapFullFirebaseUser({ user, additionalUserInfo }: firebase.auth.UserCredential): Partial<User> {
+    const mappedUser: Partial<User> = {
       uid: user.uid,
       firstName: (additionalUserInfo.profile as any).given_name,
       lastName: (additionalUserInfo.profile as any).family_name,

@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit {
     this.authService
       .googleSignIn()
       .pipe(
-        tap(console.log),
         tap((user) => {
           if (user.additionalUserInfo.isNewUser) {
             this.partialUser = of(user);
@@ -69,17 +68,7 @@ export class LoginComponent implements OnInit {
           }
         })
       )
-      .subscribe(
-        (next) => {
-          console.log(next);
-        },
-        (err) => {
-          console.error(err);
-        },
-        () => {
-          console.log('complete');
-        }
-      );
+      .subscribe();
   }
 
   forgotPassword(): void {

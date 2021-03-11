@@ -1,46 +1,52 @@
-<div class="w-full max-w-xs m-auto mt-8" *ngIf="loggedOut && !supplementaryInfoNeeded">
-  <form [formGroup]="loginFormGroup" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" (ngSubmit)="emailLogin()">
-    <div class="border border-red-600 bg-red-300 text-sm mb-4 rounded-md shadow-md p-2 text-center" *ngIf="loginError">
+<div class="w-full max-w-xs m-auto mt-8"
+     *ngIf="loggedOut && !supplementaryInfoNeeded">
+  <form [formGroup]="loginFormGroup"
+        class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        (ngSubmit)="emailLogin()">
+    <div class="border border-red-600 bg-red-300 text-sm mb-4 rounded-md shadow-md p-2 text-center"
+         *ngIf="loginError">
       <p>Username/Password entered incorrectly. Try again.</p>
     </div>
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="username"> Email </label>
+      <label class="block text-gray-700 text-sm font-bold mb-2"
+             for="username"> Email </label>
       <input formControlName="email"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="username" type="email" placeholder="Username" />
+             autocomplete="off"
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+             id="username"
+             type="email"
+             placeholder="Username" />
     </div>
     <div class="mb-6">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="password"> Password </label>
+      <label class="block text-gray-700 text-sm font-bold mb-2"
+             for="password"> Password </label>
       <input formControlName="password"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-        id="password" type="password" placeholder="******************" />
-      <p *ngIf="loginFormGroup.get('password').invalid" class="text-red-500 text-xs italic">
-        Please choose a password.
-      </p>
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+             id="password"
+             type="password"
+             placeholder="******************" />
+      <p *ngIf="loginFormGroup.get('password').invalid"
+         class="text-red-500 text-xs italic"> Please choose a password. </p>
     </div>
     <div class="">
       <div class="flex justify-between">
-        <button type="button" (click)="googleLogin()" class="w-8 object-center">
+        <button type="button"
+                (click)="googleLogin()"
+                class="w-8 object-center">
           <img src="../../../assets/icons/google.svg" />
         </button>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit">
-          Sign In
-        </button>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit"> Sign In </button>
       </div>
       <div class="flex justify-between mt-6">
         <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-          routerLink="/register">
-          Register
-        </a>
-
+           routerLink="/register"> Register </a>
         <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-          (click)="forgotPassword()">
-          Forgot Password?
-        </a>
+           (click)="forgotPassword()"> Forgot Password? </a>
       </div>
     </div>
   </form>
 </div>
-<app-supplementary-info [partialUser]="partialUser" *ngIf="supplementaryInfoNeeded"></app-supplementary-info>
+<app-supplementary-info [partialUser]="partialUser"
+                        *ngIf="supplementaryInfoNeeded">
+</app-supplementary-info>

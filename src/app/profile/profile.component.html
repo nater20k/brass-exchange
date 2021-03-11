@@ -2,12 +2,16 @@
   <div class="p-4 mx-auto text-center">
     <h2 class="text-2xl text-blue-700">Your Profile</h2>
   </div>
-  <div *ngIf="auth.user$ | async as user" class="">
+  <div *ngIf="user$ | async as user"
+       class="">
     <div class="text-white mx-auto text-center">
       <div class="bg-blue-500 h-auto mx-4 rounded-md shadow-md py-4">
-        <div *ngIf="!isEditMode; else edit" class="grid grid-cols-3">
+        <div *ngIf="!isEditMode; else edit"
+             class="grid grid-cols-3">
           <div class="col-span-1">
-            <img class="w-full pt-2 pl-3" [src]="user.photoUrl" alt="" />
+            <img class="w-full pt-2 pl-3"
+                 [src]="user.photoUrl"
+                 alt="" />
           </div>
           <div class="col-span-2 p-2">
             <div>{{ user.firstName | titlecase }} {{ user.lastName | titlecase }}</div>
@@ -19,28 +23,35 @@
         </div>
         <ng-template #edit>
           <div class="mx-10">
-            <app-edit-profile (editSubmitted)="isEditMode = !isEditMode" [user]="user"></app-edit-profile>
+            <app-edit-profile (editSubmitted)="isEditMode = !isEditMode"
+                              [user]="user"></app-edit-profile>
           </div>
         </ng-template>
         <div class="flex justify-end mt-4">
-          <button class="mx-4" (click)="isEditMode = !isEditMode">
-            <img *ngIf="!isEditMode" class="w-6" src="../../assets/icons/edit.svg" alt="" srcset="" />
+          <button class="mx-4"
+                  (click)="isEditMode = !isEditMode">
+            <img *ngIf="!isEditMode"
+                 class="w-6"
+                 src="../../assets/icons/edit.svg"
+                 alt=""
+                 srcset="" />
           </button>
         </div>
       </div>
-      <div class="grid grid-cols-2">
-        <div *ngIf="user.instrumentsListed?.length > 0; else noInstruments">
+      <div>
+        <div *ngIf="user.instrumentsListed; else noInstruments"
+             class="flex-wrap">
+          <h4>Your instruments</h4>
           <div *ngFor="let instrument of user.instrumentsListed">
-            <app-for-sale-listing
-              [config]="forSaleListingComponentConfig"
-              [instrument]="instrument"
-              (click)="navigateToDetail(instrument.id)"
-            >
+            <app-for-sale-listing [config]="forSaleListingComponentConfig"
+                                  [instrument]="instrument"
+                                  (click)="navigateToDetail(instrument.id)">
             </app-for-sale-listing>
           </div>
         </div>
         <ng-template #noInstruments>
-          <div *ngIf="!isEditMode" class="col-span-2 text-blue-500 mt-6">
+          <div *ngIf="!isEditMode"
+               class="col-span-2 text-blue-500 mt-6">
             <h4>You haven't listed any instruments</h4>
           </div>
         </ng-template>

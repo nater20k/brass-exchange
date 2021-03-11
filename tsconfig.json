@@ -11,8 +11,13 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES6",
     "module": "es2020",
-    "lib": ["es2018", "dom", "DOM.Iterable"]
+    "lib": ["es2018", "dom", "DOM.Iterable"],
+
+  }, 
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    
   }
 }

@@ -21,7 +21,6 @@ export class AuthService {
     private userApiService: UserApiService,
     private sessionService: SessionService
   ) {
-    debugger;
     this.user$ = this.setUser();
   }
 

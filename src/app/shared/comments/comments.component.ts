@@ -12,7 +12,7 @@ import { UserApiService } from 'src/app/services/users/user-api.service';
 })
 export class CommentsComponent implements OnInit {
   @Input() comments: Comment[];
-  @Output() newComment = new EventEmitter<Partial<Comment>>();
+  @Output() newComment = new EventEmitter<Comment>();
   @ViewChild('commentInput') commentInput: ElementRef;
   commentForm: FormGroup;
   showComments = false;
@@ -34,7 +34,7 @@ export class CommentsComponent implements OnInit {
   clickOnCommentHandler() {
     this.showComments = !this.showComments;
     setTimeout(() => {
-      (this.commentInput.nativeElement as any).focus();
+      (this.commentInput?.nativeElement as any)?.focus();
     }, 100);
   }
 

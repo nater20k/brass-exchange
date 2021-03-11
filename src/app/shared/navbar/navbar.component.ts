@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { of } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
@@ -18,7 +19,7 @@ export class NavbarComponent {
       .signOut()
       .pipe(
         tap(() => (this.isMenuOpen = false)),
-        switchMap(() => this.navService.navigateTo(locations.login))
+        switchMap(() => of(this.navService.navigateTo(locations.login)))
       )
       .subscribe();
   }

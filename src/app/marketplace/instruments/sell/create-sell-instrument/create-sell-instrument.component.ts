@@ -51,7 +51,7 @@ export class CreateSellInstrumentComponent implements OnInit {
       .pipe(
         map(
           (user) =>
-            new ForSaleInstrumentListingFormGroup(this.formBuilderService.createInstrumentForSaleFormGroup(), user.uid)
+            new ForSaleInstrumentListingFormGroup(this.formBuilderService.createInstrumentForSaleFormGroup(), user?.uid)
         ),
         tap((formGroup) => (this.createSellFormGroup = formGroup))
       )
