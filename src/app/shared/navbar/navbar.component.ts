@@ -18,8 +18,10 @@ export class NavbarComponent {
     this.auth
       .signOut()
       .pipe(
-        tap(() => (this.isMenuOpen = false)),
-        switchMap(() => of(this.navService.navigateTo(locations.login)))
+        tap(() => {
+          this.navService.navigateTo(locations.login);
+          this.isMenuOpen = false;
+        })
       )
       .subscribe();
   }

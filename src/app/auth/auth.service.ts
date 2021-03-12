@@ -69,9 +69,7 @@ export class AuthService {
 
   signOut(): Observable<void> {
     return from(this.afAuth.signOut()).pipe(
-      take(1),
-      finalize(() => this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser)),
-      catchError(() => of(null))
+      finalize(() => this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser))
     );
   }
 

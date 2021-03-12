@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Thread, ThreadOwner } from '@nater20k/brass-exchange-users';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { delay, finalize, map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { MessageApiService } from 'src/app/services/message/message-api.service';
 
@@ -12,15 +12,16 @@ import { MessageApiService } from 'src/app/services/message/message-api.service'
   styleUrls: ['./list-threads.component.scss'],
 })
 export class ListThreadsComponent implements OnInit {
-  threads: Observable<Thread[]>;
+  threads$: Observable<Thread[]>;
   constructor(private messageApi: MessageApiService, private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.threads = this.fetchThreads();
+    this.threads$ = this.fetchThreads();
   }
 
   fetchThreads(): Observable<Thread[]> {
     return this.auth.user$.pipe(
+      take(1),
       switchMap((user) =>
         this.messageApi
           .getThreads(user)

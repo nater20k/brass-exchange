@@ -3,15 +3,15 @@
     <h2 class="text-2xl text-blue-700">Your Profile</h2>
   </div>
   <div *ngIf="user$ | async as user"
-       class="">
+       class="max-w-lg mx-auto">
     <div class="text-white mx-auto text-center">
-      <div class="bg-blue-500 h-auto mx-4 rounded-md shadow-md py-4">
+      <div class="bg-blue-500 h-auto mx-4 rounded-md shadow-lg py-4">
         <div *ngIf="!isEditMode; else edit"
              class="grid grid-cols-3">
           <div class="col-span-1">
-            <img class="w-full pt-2 pl-3"
+            <img class="w-full mt-2 ml-3 rounded-md"
                  [src]="user.photoUrl"
-                 alt="" />
+                 alt="profile picture" />
           </div>
           <div class="col-span-2 p-2">
             <div>{{ user.firstName | titlecase }} {{ user.lastName | titlecase }}</div>
@@ -31,7 +31,7 @@
           <button class="mx-4"
                   (click)="isEditMode = !isEditMode">
             <img *ngIf="!isEditMode"
-                 class="w-6"
+                 class="w-4"
                  src="../../assets/icons/edit.svg"
                  alt=""
                  srcset="" />
@@ -39,9 +39,9 @@
         </div>
       </div>
       <div>
-        <div *ngIf="user.instrumentsListed; else noInstruments"
+        <div *ngIf="user.instrumentsListed.length; else noInstruments"
              class="flex-wrap">
-          <h4>Your instruments</h4>
+          <h4 class="text-blue-500 mt-6">Your instruments</h4>
           <div *ngFor="let instrument of user.instrumentsListed">
             <app-for-sale-listing [config]="forSaleListingComponentConfig"
                                   [instrument]="instrument"
@@ -51,8 +51,8 @@
         </div>
         <ng-template #noInstruments>
           <div *ngIf="!isEditMode"
-               class="col-span-2 text-blue-500 mt-6">
-            <h4>You haven't listed any instruments</h4>
+               class="col-span-2">
+            <h4 class="text-blue-500 mt-6">You haven't listed any instruments</h4>
           </div>
         </ng-template>
       </div>

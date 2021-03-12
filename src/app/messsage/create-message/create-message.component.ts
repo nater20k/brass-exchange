@@ -83,7 +83,7 @@ export class CreateMessageComponent implements OnInit {
   }
 
   get isBodyValid(): boolean {
-    return this.messageFormGroup.get('body').value;
+    return this.messageFormGroup.get('body').valid;
   }
 
   private buildMessageFormGroup(): void {

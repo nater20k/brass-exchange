@@ -1,11 +1,12 @@
-<div
-  [ngClass]="{ 'border-b-2': !config.simple, 'shadow-md': !config.simple }"
-  class="box-border p-6 shadow-sm mb-4 divide-solid border-gray-500"
->
+<div [ngClass]="{ 'border-b-2': !config.simple, 'shadow-md': !config.simple }"
+     class="box-border p-6 shadow-sm mb-4 divide-solid border-gray-500">
   <h3 [ngClass]="{ 'text-md text-center': !config.simple }">{{ brandModel }}</h3>
-  <div class="border-2 divide-solid rounded">
-    <app-image [isHeroImage]="true" [ownerId]="ownerId" [instrumentId]="instrumentId"></app-image>
-    <div *ngIf="!config.simple" class="text-white content flex justify-between p-4 bg-blue-500">
+  <div class="border-2 divide-solid rounded-lg bg-gray-200 overflow-hidden">
+    <app-image [isHeroImage]="true"
+               [ownerId]="ownerId"
+               [instrumentId]="instrumentId"></app-image>
+    <div *ngIf="!config.simple"
+         class="text-white content flex justify-between p-4 bg-blue-500">
       <ul class="left">
         <li><span class="bold"></span> {{ type | titlecase }}</li>
         <li *ngIf="key"><span class="bold">Key:</span> {{ key }}</li>

@@ -32,7 +32,7 @@ export class ThreadDetailComponent implements OnInit, AfterViewInit {
     if (window.location.href.split('/')[5]) {
       this.thread$ = this.auth.user$.pipe(
         tap((user) => (this.senderUsername = user.displayName)),
-        switchMap(() =>
+        switchMap((user) =>
           this.router.url.pipe(
             map((res) => {
               this.threadId = res[1]?.path;
@@ -40,7 +40,7 @@ export class ThreadDetailComponent implements OnInit, AfterViewInit {
             }),
             switchMap((threadId) => this.messageApi.getThreadById(threadId)),
             tap((thread) => {
-              if (thread.owners[0].username !== this.senderUsername) {
+              if (thread.owners[0].id !== user.uid) {
                 this.recipientUsername = thread.owners[0].username;
               } else {
                 this.recipientUsername = thread.owners[1].username;
