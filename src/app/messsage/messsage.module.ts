@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 import { CreateMessageComponent } from './create-message/create-message.component';
 import { ListThreadsComponent } from './list-threads/list-threads.component';
 import { MesssageRoutingModule } from './messsage-routing.module';
@@ -9,6 +10,6 @@ import { ThreadDetailComponent } from './thread-detail/thread-detail.component';
 
 @NgModule({
   declarations: [MesssageComponent, CreateMessageComponent, ListThreadsComponent, ThreadDetailComponent],
-  imports: [CommonModule, MesssageRoutingModule, ReactiveFormsModule],
+  imports: [CommonModule, MesssageRoutingModule, ReactiveFormsModule, SharedModule],
 })
 export class MesssageModule {}

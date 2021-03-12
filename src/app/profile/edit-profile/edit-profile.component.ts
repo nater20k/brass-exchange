@@ -3,7 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BE } from '@nater20k/brass-exchange-constants';
 import { User } from '@nater20k/brass-exchange-users';
 import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { keys, SessionService } from 'src/app/services/session.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
 
@@ -43,13 +43,19 @@ export class EditProfileComponent implements OnInit {
 
   submit(form: FormGroup) {
     if (form.dirty) {
-      this.userApi.updateUser({ uid: this.userId, ...(form.value as Partial<User>) }).subscribe(() => {
-        this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser);
-        this.editSubmitted.emit();
-        this.user = null;
-      });
+      this.userApi
+        .updateUser({ uid: this.userId, ...(form.value as Partial<User>) })
+        .pipe(finalize(() => this.editSubmitted.emit()))
+        .subscribe(() => {
+          this.sessionService.deleteItemFromLocalStorage(keys.loggedInUser);
+          this.user = null;
+        });
     } else {
       this.editSubmitted.emit();
     }
+  }
+
+  goBack() {
+    this.editSubmitted.emit();
   }
 }

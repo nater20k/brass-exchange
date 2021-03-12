@@ -3,7 +3,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { UserFormBuilderService, UserFormGroup } from '@nater20k/brass-exchange-users';
 import firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { AuthService } from '../auth.service';
 
@@ -51,23 +51,24 @@ export class LoginComponent implements OnInit {
         () => {
           this.loginError = true;
           this.loginFormGroup.reset();
-        },
-        () => {}
+        }
       );
   }
 
   googleLogin(): void {
     this.authService
       .googleSignIn()
-      .pipe(take(1))
-      .subscribe((user) => {
-        if (user.additionalUserInfo.isNewUser) {
-          this.partialUser = of(user);
-          this.supplementaryInfoNeeded = true;
-        } else {
-          this.navService.navigateTo(locations.instruments.home);
-        }
-      });
+      .pipe(
+        tap((user) => {
+          if (user.additionalUserInfo.isNewUser) {
+            this.partialUser = of(user);
+            this.supplementaryInfoNeeded = true;
+          } else {
+            this.navService.navigateTo(locations.instruments.home);
+          }
+        })
+      )
+      .subscribe();
   }
 
   forgotPassword(): void {

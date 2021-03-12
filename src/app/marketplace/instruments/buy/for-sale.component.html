@@ -5,6 +5,7 @@
   </select>
 </div> -->
 <div class="z-0">
-  <app-for-sale-listing *ngFor="let instrument of instrumentsForSale | async" [instrument]="instrument"
-    (click)="navigateToDetail(instrument.id)"></app-for-sale-listing>
+  <app-for-sale-listing *ngFor="let instrument of instrumentsForSale | async"
+                        [instrument]="instrument"
+                        (click)="navigateToDetail(instrument.id)"></app-for-sale-listing>
 </div>

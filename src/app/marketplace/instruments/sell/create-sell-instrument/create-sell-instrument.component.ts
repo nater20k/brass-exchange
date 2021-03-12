@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstrumentApiService } from 'src/app/services/instruments/instrument-api.service';
+import { locations, NavigationService } from 'src/app/services/navigation/navigation.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
 import { UserApiService } from 'src/app/services/users/user-api.service';
 
@@ -37,7 +38,8 @@ export class CreateSellInstrumentComponent implements OnInit {
     private storage: UploadService,
     private auth: AuthService,
     private instrumentAdapter: InstrumentAdapterService,
-    private userApi: UserApiService
+    private userApi: UserApiService,
+    private navService: NavigationService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +51,7 @@ export class CreateSellInstrumentComponent implements OnInit {
       .pipe(
         map(
           (user) =>
-            new ForSaleInstrumentListingFormGroup(this.formBuilderService.createInstrumentForSaleFormGroup(), user.uid)
+            new ForSaleInstrumentListingFormGroup(this.formBuilderService.createInstrumentForSaleFormGroup(), user?.uid)
         ),
         tap((formGroup) => (this.createSellFormGroup = formGroup))
       )
@@ -83,8 +85,7 @@ export class CreateSellInstrumentComponent implements OnInit {
         switchMap((forSale) => this.uploadPhoto(forSale.id).pipe(map(() => forSale.id))),
         switchMap((id) => this.userApi.addToPersonalInstrumentsListed(instrument.ownerId, { ...instrument, id }))
       )
-
-      .subscribe();
+      .subscribe(() => this.navService.navigateTo(locations.instruments.buy));
   }
 
   clearForm(): void {

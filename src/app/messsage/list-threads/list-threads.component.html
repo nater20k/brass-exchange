@@ -1,9 +1,13 @@
 <div class="flex justify-end">
-  <button class="bg-blue-500 text-gray-100 rounded-md p-2 m-2" routerLink="/messages/thread">New Message</button>
+  <button class="bg-blue-500 text-gray-100 rounded-md p-2 m-2"
+          routerLink="/messages/thread">New Message</button>
 </div>
-<div *ngFor="let thread of threads | async" (click)="navigateToDetail(thread.id)"
-  class=" m-2 p-4 text-left bg-blue-500 text-white rounded-md border-gray-100 border-b-2 text-xl font-bold">
-
-  {{thread.owners[0].username | titlecase}}
-
-</div>
+<ng-container *ngIf="threads$ | async as threads; else loading">
+  <div *ngFor="let thread of threads"
+       (click)="navigateToDetail(thread.id)"
+       class=" m-2 p-4 text-left bg-blue-500 text-white rounded-md border-gray-100 border-2 text-xl font-bold">
+    {{thread.owners[0].username | titlecase}} </div>
+</ng-container>
+<ng-template #loading>
+  <app-loading></app-loading>
+</ng-template>
