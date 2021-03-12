@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 export class NavigationService {
   constructor(private router: Router) {}
 
-  navigateTo(location: string): void {
-    this.router.navigate([location]);
+  navigateTo(location: string): Promise<boolean> {
+    return this.router.navigateByUrl(location);
   }
 }
 

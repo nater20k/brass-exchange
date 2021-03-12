@@ -34,7 +34,10 @@ export class UserApiService {
           uid: userId,
           dateAccountCreated: new Date((user.dateAccountCreated as any).toDate()),
         })),
-        catchError(() => of(null))
+        catchError((err) => {
+          console.error(err);
+          return of(null);
+        })
       );
   }
 
