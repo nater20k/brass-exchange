@@ -1,5 +1,5 @@
 .screen {
-  height: stretch;
+  height: -webkit-fill-available;
   overflow: auto;
   padding-bottom: 10px;
 }
