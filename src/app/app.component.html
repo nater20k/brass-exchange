@@ -1,4 +1,4 @@
-<app-navbar [authenticated]="!!(auth.user$ | async)"></app-navbar>
+<app-navbar [authenticated]="(auth.user$ | async) !== null"></app-navbar>
 <div class="pt-12 h-screen">
   <router-outlet></router-outlet>
   <!-- <p class="text-center text-gray-500 text-xs">&copy;2020 Brass Exchange. All rights reserved.</p> -->

@@ -23,12 +23,10 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.user$ = this.auth.user$.pipe(
-      map((user) => {
-        return {
-          ...user,
-          dateAccountCreated: new Date((<any>user.dateAccountCreated).seconds * 1000),
-        };
-      })
+      map((user) => ({
+        ...user,
+        dateAccountCreated: new Date((user.dateAccountCreated as any).seconds * 1000),
+      }))
     );
   }
 
